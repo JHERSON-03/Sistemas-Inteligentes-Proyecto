@@ -15,18 +15,21 @@ Las pantallas provienen del proyecto de Google Stitch **"Dark Theme Interactive 
 
 ## Estructura
 
+Arquitectura MVC: **Modelo** (`backend/app/models`), **Controlador** (`backend/app/controllers` + `services`) y **Vista** (el frontend en React, que consume la API).
+
 ```
 backend/
   app/
     main.py            # App FastAPI, CORS, creación de tablas y datos iniciales
     config.py          # Variables de entorno y reglas de puntos
     database.py        # Conexión a Supabase (PostgreSQL) o SQLite local
-    models.py          # Mapeo a las tablas en español: usuarios, rutas, actividades, evaluaciones, retos...
+    models/            # MODELO: mapeo a las tablas en español (usuarios, rutas, actividades, evaluaciones, retos...)
     security.py        # Contraseñas (bcrypt, compatible con pgcrypto) y JWT
     seed.py            # Contenido académico y datos de ejemplo para una base vacía
     cargar_contenido.py # Agrega a la base el contenido que falte, sin tocar usuarios ni progreso
-    routers/           # auth, dashboard, routes, assessment, tutor, metrics
-    services/
+    schemas.py         # Validación de los datos que llegan en cada petición
+    controllers/       # CONTROLADOR: recibe la petición y responde (auth, dashboard, routes, assessment, tutor, metrics)
+    services/          # Lógica de negocio que usan los controladores
       gamification.py  # Racha, puntos, tiempo semanal, logros
       adaptive.py      # Nivel por desempeño, recomendación de rutas, nivel de autonomía
       tutor_ai.py      # Tutor socrático (Groq/Grok o motor local)

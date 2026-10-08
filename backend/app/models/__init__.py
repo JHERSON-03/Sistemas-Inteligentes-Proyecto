@@ -10,8 +10,8 @@ from sqlalchemy import (JSON, Boolean, Date, DateTime, ForeignKey, Integer, Nume
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from .config import GRADE
-from .database import Base
+from ..config import GRADE
+from ..database import Base
 
 # JSONB en PostgreSQL, JSON en SQLite
 JsonType = JSON().with_variant(JSONB(), "postgresql")

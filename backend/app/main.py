@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .config import FRONTEND_ORIGIN, INIT_DB
 from .database import Base, SessionLocal, engine
-from .routers import assessment, auth, dashboard, metrics, routes, tutor
+from .controllers import assessment, auth, dashboard, metrics, routes, tutor
 from .seed import seed
 
 
