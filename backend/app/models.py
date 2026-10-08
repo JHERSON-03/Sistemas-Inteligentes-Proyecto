@@ -10,6 +10,7 @@ from sqlalchemy import (JSON, Boolean, Date, DateTime, ForeignKey, Integer, Nume
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from .config import GRADE
 from .database import Base
 
 # JSONB en PostgreSQL, JSON en SQLite
@@ -23,7 +24,7 @@ class User(Base):
     dni: Mapped[str] = mapped_column("dni", String(8), unique=True, index=True)
     password_hash: Mapped[str] = mapped_column("clave_hash", String(200))
     full_name: Mapped[str] = mapped_column("nombre_completo", String(120))
-    grade: Mapped[str] = mapped_column("grado", String(20), default="5to Sec.")
+    grade: Mapped[str] = mapped_column("grado", String(20), default=GRADE)
     section: Mapped[str] = mapped_column("seccion", String(2), default="B")
     points: Mapped[int] = mapped_column("puntos", Integer, default=0)
     streak: Mapped[int] = mapped_column("racha", Integer, default=0)

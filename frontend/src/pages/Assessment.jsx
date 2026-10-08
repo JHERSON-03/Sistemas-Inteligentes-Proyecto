@@ -12,6 +12,15 @@ const CONFIDENCE = [
   { value: 'alta', label: 'Muy seguro' },
 ]
 
+// Ilustraciones de Stitch según el tema de la pregunta
+function questionImage(text) {
+  const t = text.toLowerCase()
+  if (t.includes('mototaxi') || t.includes('bicicleta') || t.includes('plaza de laredo')) {
+    return { src: '/img/rapidez-laredo.jpg', alt: 'Bicicleta y skate en la Plaza de Laredo: distancia y rapidez' }
+  }
+  return null
+}
+
 export default function Assessment() {
   const { setPoints } = useAuth()
   const toast = useToast()
@@ -95,7 +104,9 @@ export default function Assessment() {
       </div>
 
       <div className="card overflow-hidden">
-        {q.situation.toLowerCase().includes('mototaxi') && <img src="/img/mototaxi-mruv.jpg" alt="Mototaxi en movimiento por Laredo" className="h-44 w-full object-cover" />}
+        {questionImage(q.situation) && (
+          <img src={questionImage(q.situation).src} alt={questionImage(q.situation).alt} className="h-44 w-full object-cover" />
+        )}
         <p className="p-5 text-lg font-semibold leading-relaxed">{q.situation}</p>
       </div>
 

@@ -51,7 +51,7 @@ export default function Register() {
           <Logo size="lg" />
           <div>
             <h1 className="text-2xl font-extrabold">Activa tu cuenta</h1>
-            <p className="text-muted">Pasteur Learn · 5to de secundaria</p>
+            <p className="text-muted">Pasteur Learn · 1ro de secundaria</p>
           </div>
         </div>
 
@@ -68,7 +68,7 @@ export default function Register() {
           <label className="block space-y-2">
             <span className="label">Sección</span>
             <select className="input" value={form.section} onChange={set('section')}>
-              {['A', 'B', 'C', 'D', 'E'].map((s) => <option key={s} value={s}>5to {s}</option>)}
+              {['A', 'B', 'C', 'D', 'E'].map((s) => <option key={s} value={s}>1ro {s}</option>)}
             </select>
           </label>
         </div>

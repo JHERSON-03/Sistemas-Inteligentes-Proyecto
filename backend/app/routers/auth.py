@@ -3,6 +3,7 @@ from sqlalchemy import or_, select
 from sqlalchemy.orm import Session
 
 from .. import models
+from ..config import GRADE
 from ..database import get_db
 from ..schemas import LoginIn, RegisterIn
 from ..security import create_token, current_user, hash_password, verify_password
@@ -43,7 +44,7 @@ def register(data: RegisterIn, db: Session = Depends(get_db)):
         raise HTTPException(status.HTTP_409_CONFLICT, "Ese usuario o DNI ya está registrado")
     user = models.User(
         username=username, dni=data.dni, full_name=data.full_name.strip(),
-        password_hash=hash_password(data.password), grade="5to Sec.", section=data.section,
+        password_hash=hash_password(data.password), grade=GRADE, section=data.section,
     )
     db.add(user)
     db.commit()

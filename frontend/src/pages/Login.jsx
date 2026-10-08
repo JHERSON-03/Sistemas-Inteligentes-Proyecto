@@ -44,7 +44,7 @@ export default function Login() {
   return (
     <div className="grid min-h-screen lg:grid-cols-2">
       <section className="relative hidden overflow-hidden lg:block">
-        <img src="/img/banner-estudiante.jpg" alt="Estudiante aprendiendo con un robot tutor amigable"
+        <img src="/img/banner-1ro.jpg" alt="Estudiante aprendiendo con un robot tutor amigable"
           className="absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/30 to-transparent" />
         <div className="absolute bottom-10 left-10 right-10">
@@ -58,7 +58,7 @@ export default function Login() {
           <div className="flex flex-col items-center text-center">
             <Logo size="lg" />
             <h1 className="mt-4 text-2xl font-extrabold">Bienvenido a Pasteur Learn</h1>
-            <p className="mt-1 text-muted">Solo para estudiantes de 5to de secundaria</p>
+            <p className="mt-1 text-muted">Solo para estudiantes de 1ro de secundaria</p>
           </div>
 
           <img src="/img/robot-tutor.jpg" alt="" className="mx-auto h-28 w-28 rounded-full object-cover lg:hidden" />

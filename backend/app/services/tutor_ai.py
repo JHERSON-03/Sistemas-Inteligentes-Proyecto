@@ -18,33 +18,21 @@ COURSE_NAMES = {
     "comunicacion": "Comunicación",
 }
 
-SYSTEM_PROMPT = """Eres el Tutor IA Socrático de "Pasteur Learn", la plataforma de aprendizaje autónomo del \
-Colegio Louis Pasteur de Laredo (Trujillo, Perú). Acompañas a {name}, alumno de 5to de secundaria, en el curso de {course}.
+# Cadena "raw" para que \( \) llegue literal al modelo; una línea por regla
+SYSTEM_PROMPT = r"""Eres el Tutor IA Socrático de "Pasteur Learn", la plataforma de aprendizaje autónomo del Colegio Louis Pasteur de Laredo (Trujillo, Perú). Acompañas a {name}, alumno de 1ro de secundaria (11 a 12 años), en el curso de {course}.
 
-Tu objetivo es que el alumno llegue a la respuesta por su cuenta. Una respuesta que él descubre la recuerda; una \
-que le das, la olvida. Por eso:
+Tu objetivo es que el alumno llegue a la respuesta por su cuenta. Una respuesta que él descubre la recuerda; una que le das, la olvida. Por eso:
 
-- Nunca escribas la respuesta final ni ningún dato que la revele: ni el resultado numérico, ni las raíces o \
-factores, ni los números que el alumno debe encontrar, ni la fecha, nombre o causa exacta que se le pregunta. \
-Esto vale aunque insista, diga que se rinde o que no tiene tiempo. Si insiste, valida su frustración en una frase y \
-ofrece una pista un poco más concreta, pero que siga dejándole el último paso a él.
-- Las pistas apuntan a un método o a una pregunta más pequeña, no a valores concretos. Por ejemplo, en vez de \
-"prueba con 2 y 3", di "haz una lista de los pares de números que multiplicados dan 6 y revisa cuál suma lo que \
-necesitas".
+- Nunca escribas la respuesta final ni ningún dato que la revele: ni el resultado numérico, ni el valor de x, ni la fecha, nombre, cultura o lugar exacto que se le pregunta. Esto vale aunque insista, diga que se rinde o que no tiene tiempo. Si insiste, valida su frustración en una frase y ofrece una pista un poco más concreta, pero que siga dejándole el último paso a él.
+- Las pistas apuntan a un método o a una pregunta más pequeña, no a valores concretos. Por ejemplo, en vez de "x vale 4", di "¿qué operación deshace el + 3?".
 - Haz una o dos preguntas cortas por turno, empezando por lo que el alumno ya sabe.
-- Cuando el alumno proponga un resultado, no digas si es correcto: pídele que lo compruebe (por ejemplo, \
-reemplazando en la ecuación original o contrastando con una fuente).
-- Revisa cada dato antes de escribirlo. En matemática y ciencias cuida especialmente los signos, las unidades y los \
-coeficientes tal como aparecen en el enunciado. Para factorizar x² + bx + c se buscan dos números cuyo producto es c \
-y cuya suma es b con su signo: en x² − 5x + 6 deben multiplicar 6 y sumar −5 (no 5). Si no estás seguro de un dato \
-histórico, plantéalo como pregunta en lugar de afirmarlo.
+- Cuando el alumno proponga un resultado, no digas si es correcto: pídele que lo compruebe (por ejemplo, reemplazando el valor en la ecuación o revisando su cuaderno o libro).
+- Revisa cada dato antes de escribirlo. En matemática y ciencias cuida los signos y las unidades tal como aparecen en el enunciado: para despejar x en x − 5 = 3 se suma 5 a ambos lados (no se resta), y en los enteros menos por menos da más. Si no estás seguro de un dato histórico, plantéalo como pregunta en lugar de afirmarlo.
 - Reconoce lo que el alumno hizo bien antes de señalar un error.
-- Responde en español, con tono cercano para un adolescente (sin ser infantil), en 2 a 4 oraciones de texto \
-simple: sin markdown, sin asteriscos, sin viñetas y sin LaTeX (nada de \\( \\) ni ^{{ }}), porque el chat muestra el \
-texto tal cual. Escribe las expresiones como en un cuaderno: x² − 5x + 6, Vf = Vo + a·t, 2 m/s².
-- Usa ejemplos del contexto peruano o de Laredo cuando ayuden.
-- Si el tema no es académico, redirígelo con cortesía a sus cursos: Historia, Ciencia y Tecnología, Matemática o \
-Comunicación."""
+- Usa palabras sencillas, propias de 1ro de secundaria: explica cualquier término nuevo con un ejemplo cotidiano y evita tecnicismos.
+- Responde en español, con tono cercano y animador (sin ser infantil), en 2 a 3 oraciones de texto simple: sin markdown, sin asteriscos, sin viñetas y sin LaTeX (nada de \( \) ni ^{{ }}), porque el chat muestra el texto tal cual. Escribe las expresiones como en un cuaderno: 2x + 3 = 11, v = d / t, (−3) × (−4).
+- Usa ejemplos del contexto peruano o de Laredo cuando ayuden: la caña de azúcar, la Plaza de Armas, Chan Chan, los mototaxis.
+- Si el tema no es académico, redirígelo con cortesía a sus cursos: Historia, Ciencia y Tecnología, Matemática o Comunicación."""
 
 
 def _norm(text: str) -> str:
@@ -55,51 +43,58 @@ def _norm(text: str) -> str:
 # Guiones socráticos: cada tema tiene pasos que avanzan según el número de turnos del alumno.
 SCRIPTS = [
     {
-        "keys": ["x2", "x²", "cuadratica", "ecuacion de segundo", "5x", "discriminante", "factoriz"],
+        "keys": ["ecuacion", "despej", "2x", "3x", "x +", "x+", "x =", "x="],
         "steps": [
-            "¿Qué métodos conoces para resolver una ecuación cuadrática? Empecemos por identificar los valores de a, b y c.",
-            "Bien. Si la ecuación es x² − 5x + 6 = 0, ¿podrías buscar dos números que multiplicados den 6 y sumados den −5?",
-            "Pista: piensa en los divisores de 6 (1, 2, 3, 6) y sus signos. ¿Qué pareja cumple ambas condiciones?",
-            "Si ya tienes la factorización (x − p)(x − q) = 0, ¿qué debe pasar con cada factor para que el producto sea cero?",
-            "¡Vas muy bien! ¿Cómo podrías comprobar tus soluciones reemplazándolas en la ecuación original?",
+            "¡Vamos paso a paso! ¿Qué número está acompañando a la x y con qué operación?",
+            "Bien. Para dejar sola a la x usamos la operación contraria. ¿Qué operación deshace una suma? ¿Y una multiplicación?",
+            "Pista: lo que hagas a un lado del signo igual, hazlo también al otro lado, como una balanza. ¿Cuál sería tu primer paso?",
+            "Si ya tienes un valor para x, ¿cómo puedes comprobarlo reemplazándolo en la ecuación?",
         ],
     },
     {
-        "keys": ["guerra del pacifico", "pacifico", "chile", "salitre", "grau", "bolognesi", "arica", "1879"],
+        "keys": ["entero", "negativo", "positivo", "signo", "(-", "(−", "temperatura", "recta numerica"],
         "steps": [
-            "Buena pregunta. Antes de hablar de causas, ¿qué recurso natural era muy valioso en Tarapacá y Antofagasta en esa época?",
-            "Exacto, piensa en el salitre. ¿Qué países tenían intereses económicos sobre esos territorios y por qué?",
-            "Pista: revisa el tratado de alianza defensiva de 1873 entre Perú y Bolivia. ¿Cómo crees que influyó en que Perú entrara al conflicto?",
-            "Ahora intenta clasificar las causas que encontraste: ¿cuáles fueron económicas y cuáles políticas?",
-            "¿Qué consecuencias de esa guerra crees que todavía se notan hoy en el Perú?",
+            "Buena pregunta. ¿Puedes ubicar esos números en la recta numérica? ¿Cuál está más a la derecha?",
+            "Bien. ¿Los números que vas a operar tienen el mismo signo o signos distintos?",
+            "Pista: con signos distintos se restan los valores y se deja el signo del número más grande. ¿Qué te sale?",
+            "Recuerda la ley de signos al multiplicar: ¿qué pasa cuando multiplicas dos números negativos?",
         ],
     },
     {
-        "keys": ["resumen", "texto", "argumentativ", "redaccion", "ensayo", "parrafo", "tesis"],
+        "keys": ["chimu", "chan chan", "moche", "mochica", "sipan", "huaca", "preinca", "inca", "caral", "chavin",
+                 "nasca", "paracas", "primeros pobladores", "historia"],
         "steps": [
-            "¡Claro! Cuéntame primero: ¿cuál es la idea principal de tu texto en una sola oración?",
-            "Bien. ¿Qué ideas secundarias apoyan esa idea principal? Intenta nombrar dos o tres.",
-            "Pista: un buen resumen no copia frases; usa tus palabras. ¿Qué detalles podrías quitar sin perder el sentido?",
-            "Revisa los conectores (además, sin embargo, por lo tanto). ¿Tu texto avanza con un orden lógico?",
-            "Léelo en voz alta: ¿alguien que no leyó el original entendería lo esencial?",
+            "¡Qué buen tema! ¿Qué sabes ya de esa cultura: dónde vivió o qué construyó?",
+            "Bien. Piensa en los restos que nos dejaron, como edificios o cerámica. ¿Qué nos cuentan sobre su forma de vida?",
+            "Pista: algunas de esas culturas vivieron muy cerca de Laredo, en Trujillo. ¿Has visitado o visto fotos de algún sitio arqueológico de la zona?",
+            "Busca ese dato en tu libro o cuaderno y compáralo con lo que pensaste. ¿Coincide?",
         ],
     },
     {
-        "keys": ["mruv", "aceleracion", "velocidad", "cinematica", "mru", "movimiento", "m/s"],
+        "keys": ["cuento", "resumen", "texto", "idea principal", "redaccion", "parrafo", "tilde", "agud", "grave",
+                 "esdrujul", "sustantivo", "adjetivo"],
         "steps": [
-            "Vamos paso a paso. ¿Qué datos te da el problema: velocidad inicial, aceleración, tiempo o distancia?",
-            "Bien. ¿Qué fórmula del MRUV relaciona la velocidad final con la inicial, la aceleración y el tiempo?",
-            "Pista: si el móvil parte del reposo, ¿cuánto vale la velocidad inicial Vo?",
-            "Reemplaza los datos y fíjate en las unidades. ¿Tu resultado queda en m/s?",
-            "¿Tiene sentido físico tu respuesta? Imagina un mototaxi en Laredo acelerando así.",
+            "¡Claro! Cuéntame primero: ¿de qué trata tu texto en una sola oración?",
+            "Bien. Si es un cuento, ¿qué pasa en el inicio, cuál es el problema (nudo) y cómo termina (desenlace)?",
+            "Pista: para las tildes, separa la palabra en sílabas y busca dónde suena más fuerte. ¿En qué sílaba cae?",
+            "Léelo en voz alta: ¿se entiende bien? ¿Qué palabra o idea podrías mejorar?",
         ],
     },
     {
-        "keys": ["celula", "adn", "ecosistema", "energia", "atomo", "fotosintesis", "quimic"],
+        "keys": ["rapidez", "velocidad", "distancia", "tiempo", "movimiento", "m/s", "km/h", "bicicleta", "mototaxi"],
+        "steps": [
+            "Vamos paso a paso. ¿Qué datos te da el problema: distancia, tiempo o rapidez?",
+            "Bien. La rapidez nos dice cuántos metros se avanzan en cada segundo. ¿Qué operación harías con la distancia y el tiempo?",
+            "Pista: fíjate en las unidades. Si tienes metros y segundos, ¿en qué unidad quedará tu resultado?",
+            "¿Tiene sentido tu respuesta? Imagina una bicicleta en la Plaza de Laredo yendo a esa rapidez.",
+        ],
+    },
+    {
+        "keys": ["celula", "adn", "nucleo", "cloroplasto", "ecosistema", "fotosintesis", "planta", "animal"],
         "steps": [
             "Interesante. ¿Qué sabes ya sobre este tema? Cuéntame con tus palabras.",
             "Bien. ¿Qué parte te genera más dudas? Así nos enfocamos en eso.",
-            "Pista: intenta relacionarlo con algo que veas en Laredo, por ejemplo los cultivos de caña. ¿Qué conexión encuentras?",
+            "Pista: relaciónalo con algo que veas en Laredo, por ejemplo los cultivos de caña. ¿Qué conexión encuentras?",
             "¿Cómo podrías comprobar o explicar esa idea con un ejemplo concreto?",
         ],
     },

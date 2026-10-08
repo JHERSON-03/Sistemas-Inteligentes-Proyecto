@@ -94,7 +94,7 @@ export default function Dashboard() {
     <div className="space-y-5">
       {/* 1. Banner de bienvenida */}
       <section className="relative overflow-hidden rounded-card bg-gradient-to-r from-[#1b2a6b] via-[#2a2580] to-[#5b3fd1] p-6 shadow-soft md:p-8">
-        <img src="/img/banner-estudiante.jpg" alt="" className="absolute inset-y-0 right-0 hidden h-full w-1/2 object-cover opacity-40 [mask-image:linear-gradient(to_left,black,transparent)] md:block" />
+        <img src="/img/banner-1ro.jpg" alt="" className="absolute inset-y-0 right-0 hidden h-full w-1/2 object-cover opacity-40 [mask-image:linear-gradient(to_left,black,transparent)] md:block" />
         <div className="relative max-w-xl">
           <h1 className="text-2xl font-extrabold md:text-3xl">¡Hola, {user.first_name}! Sigue con tu aprendizaje hoy 👋</h1>
           <p className="mt-2 text-[#d6dbff]">

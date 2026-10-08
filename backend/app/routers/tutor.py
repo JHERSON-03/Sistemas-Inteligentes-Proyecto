@@ -15,9 +15,9 @@ from ..services.tutor_ai import tutor_reply
 router = APIRouter(prefix="/api/tutor", tags=["tutor"])
 
 SUGGESTIONS = [
-    "¿Cómo resuelvo x² − 5x + 6 = 0?",
-    "¿Qué causó la Guerra del Pacífico?",
-    "Ayúdame a mejorar mi resumen",
+    "¿Cómo resuelvo 2x + 3 = 11?",
+    "¿Quiénes construyeron Chan Chan?",
+    "Ayúdame a mejorar mi cuento",
 ]
 
 
