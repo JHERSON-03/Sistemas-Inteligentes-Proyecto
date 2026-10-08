@@ -7,16 +7,19 @@ import { useToast } from '../context/ToastContext'
 import { useApi } from '../hooks/useApi'
 
 const CONFIDENCE = [
-  { value: 'nada', label: 'Nada seguro' },
-  { value: 'regular', label: 'Más o menos' },
-  { value: 'muy', label: 'Muy seguro' },
+  { value: 'baja', label: 'Nada seguro' },
+  { value: 'media', label: 'Más o menos' },
+  { value: 'alta', label: 'Muy seguro' },
 ]
 
 export default function Assessment() {
   const { setPoints } = useAuth()
   const toast = useToast()
+  const list = useApi(() => api.assessments(), [])
+  const [currentId, setCurrentId] = useState(null)
+  const activeId = currentId ?? list.data?.[0]?.id ?? null
   const { data, error, loading, reload } = useApi(
-    () => api.assessments().then((list) => api.assessment(list[0].id)), [])
+    () => (activeId ? api.assessment(activeId) : Promise.resolve(null)), [activeId])
   const [index, setIndex] = useState(0)
   const [selected, setSelected] = useState(null)
   const [confidence, setConfidence] = useState(null)
@@ -24,7 +27,10 @@ export default function Assessment() {
   const [score, setScore] = useState({ correct: 0, points: 0 })
   const [busy, setBusy] = useState(false)
 
-  if (loading) return <Loading />
+  if (list.error) return <ErrorBox message={list.error} onRetry={list.reload} />
+  if (list.loading || loading || !data) {
+    return list.data?.length === 0 ? <ErrorBox message="Aún no hay autoevaluaciones disponibles." /> : <Loading />
+  }
   if (error) return <ErrorBox message={error} onRetry={reload} />
 
   const total = data.questions.length
@@ -47,9 +53,23 @@ export default function Assessment() {
 
   const next = () => { setIndex((i) => i + 1); setSelected(null); setConfidence(null); setResult(null) }
   const restart = () => { setIndex(0); setScore({ correct: 0, points: 0 }); setSelected(null); setConfidence(null); setResult(null) }
+  const choose = (id) => { if (id !== activeId) { setCurrentId(id); restart() } }
+
+  const picker = list.data.length > 1 && (
+    <div className="mx-auto flex max-w-3xl flex-wrap gap-2">
+      {list.data.map((a) => (
+        <button key={a.id} onClick={() => choose(a.id)}
+          className={`chip border px-4 py-2 ${a.id === activeId ? 'border-primary bg-primary text-white' : 'border-line text-muted hover:text-ink'}`}>
+          {a.title} · {a.questions} {a.questions === 1 ? 'pregunta' : 'preguntas'}
+        </button>
+      ))}
+    </div>
+  )
 
   if (finished) {
     return (
+      <div className="space-y-5">
+      {picker}
       <div className="card mx-auto max-w-lg animate-pop p-8 text-center">
         <Trophy className="mx-auto mb-3 text-gold" size={48} />
         <h1 className="text-2xl font-extrabold">¡Terminaste el desafío!</h1>
@@ -57,11 +77,13 @@ export default function Assessment() {
         <p className="mt-2 text-sm text-muted">Recuerda: esto no es una nota, es una forma de ver cómo razonas.</p>
         <button className="btn-primary mt-6" onClick={restart}><RotateCcw size={16} /> Volver a intentarlo</button>
       </div>
+      </div>
     )
   }
 
   return (
     <div className="mx-auto max-w-3xl space-y-5">
+      {picker}
       <div>
         <p className="text-xs font-extrabold uppercase tracking-widest text-tutor">Evaluación autónoma formativa</p>
         <div className="mt-1 flex flex-wrap items-center justify-between gap-2">
@@ -73,7 +95,7 @@ export default function Assessment() {
       </div>
 
       <div className="card overflow-hidden">
-        {index === 0 && <img src="/img/mototaxi-mruv.jpg" alt="Mototaxi en movimiento por Laredo" className="h-44 w-full object-cover" />}
+        {q.situation.toLowerCase().includes('mototaxi') && <img src="/img/mototaxi-mruv.jpg" alt="Mototaxi en movimiento por Laredo" className="h-44 w-full object-cover" />}
         <p className="p-5 text-lg font-semibold leading-relaxed">{q.situation}</p>
       </div>
 

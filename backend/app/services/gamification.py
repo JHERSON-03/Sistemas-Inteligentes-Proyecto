@@ -48,7 +48,7 @@ def weekly_minutes_by_kind(db: Session, user: models.User) -> dict[str, float]:
         .where(models.StudyLog.user_id == user.id, models.StudyLog.day >= week_start())
         .group_by(models.StudyLog.kind)
     ).all()
-    data = {"rutas": 0.0, "tutor": 0.0, "autoevaluacion": 0.0}
+    data = {"ruta": 0.0, "tutor": 0.0, "autoevaluacion": 0.0}
     data.update({k: float(v or 0) for k, v in rows})
     return data
 

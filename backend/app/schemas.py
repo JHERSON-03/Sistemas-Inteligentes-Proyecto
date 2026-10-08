@@ -20,7 +20,7 @@ class OptionIn(BaseModel):
 
 class AssessmentAnswerIn(BaseModel):
     option: int = Field(..., ge=0)
-    confidence: str = Field(..., pattern=r"^(nada|regular|muy)$")
+    confidence: str = Field(..., pattern=r"^(baja|media|alta)$")
 
 
 class TutorMessageIn(BaseModel):

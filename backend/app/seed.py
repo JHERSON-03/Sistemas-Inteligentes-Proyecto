@@ -247,7 +247,7 @@ def seed(db: Session) -> None:
     db.flush()
     for i, (situation, opts, ans, ok, ko) in enumerate(questions, start=1):
         db.add(models.AssessmentQuestion(assessment_id=a.id, order=i, situation=situation,
-                                         options=[{"text": t, "reason": r} for t, r in opts], answer=ans,
+                                         options=[{"texto": t, "razon": r} for t, r in opts], answer=ans,
                                          feedback_ok=ok, feedback_ko=ko))
 
     for slug, q, opts, ans, expl in CHALLENGES:
@@ -281,7 +281,7 @@ def seed(db: Session) -> None:
     # Tiempo de estudio de la semana: rutas 4.5 h, tutor 2.2 h, autoevaluación 1.8 h
     monday = today - timedelta(days=today.weekday())
     week_days = [monday + timedelta(days=i) for i in range((today - monday).days + 1)]
-    for kind, minutes in (("rutas", 270), ("tutor", 132), ("autoevaluacion", 108)):
+    for kind, minutes in (("ruta", 270), ("tutor", 132), ("autoevaluacion", 108)):
         per_day = minutes / len(week_days)
         for d in week_days:
             db.add(models.StudyLog(user_id=joaquin.id, kind=kind, minutes=per_day, day=d))

@@ -10,7 +10,7 @@ Las pantallas provienen del proyecto de Google Stitch **"Dark Theme Interactive 
 | Capa | Tecnología | Por qué |
 |---|---|---|
 | Frontend | React 18 + Vite + TailwindCSS + React Router + lucide-react | Stitch genera Tailwind; la paleta del design system "Nocturnal Scholar" se pasó a `tailwind.config.js` |
-| Backend | Python + FastAPI + SQLAlchemy + SQLite + JWT | Python facilita la parte de sistemas inteligentes (tutor IA, adaptatividad, métricas) |
+| Backend | Python + FastAPI + SQLAlchemy + PostgreSQL (Supabase) + JWT | Python facilita la parte de sistemas inteligentes (tutor IA, adaptatividad, métricas) |
 | IA | Groq (gratis) o xAI Grok vía API compatible con OpenAI + motor socrático local | Sin API key el tutor funciona igual con reglas |
 
 ## Estructura
@@ -20,9 +20,11 @@ backend/
   app/
     main.py            # App FastAPI, CORS, creación de tablas y datos iniciales
     config.py          # Variables de entorno y reglas de puntos
-    models.py          # Tablas: usuarios, rutas, actividades, evaluaciones, retos, tutor, tiempo de estudio
-    security.py        # Contraseñas (PBKDF2) y JWT
-    seed.py            # Cursos, 8 rutas con 37 actividades, autoevaluación, retos y alumnos de 5to B
+    database.py        # Conexión a Supabase (PostgreSQL) o SQLite local
+    models.py          # Mapeo a las tablas en español: usuarios, rutas, actividades, evaluaciones, retos...
+    security.py        # Contraseñas (bcrypt, compatible con pgcrypto) y JWT
+    seed.py            # Contenido académico y datos de ejemplo para una base vacía
+    cargar_contenido.py # Agrega a la base el contenido que falte, sin tocar usuarios ni progreso
     routers/           # auth, dashboard, routes, assessment, tutor, metrics
     services/
       gamification.py  # Racha, puntos, tiempo semanal, logros
@@ -47,11 +49,27 @@ cd backend
 python -m venv .venv
 .venv\Scripts\activate          # Windows (en Linux/Mac: source .venv/bin/activate)
 pip install -r requirements.txt
-copy .env.example .env          # opcional: agrega LLM_API_KEY (Groq o Grok) para el tutor IA
+copy .env.example .env          # completa DATABASE_URL (Supabase) y LLM_API_KEY (Groq o Grok)
 uvicorn app.main:app --reload --port 8000
 ```
 
-La base `pasteur.db` se crea sola con datos de ejemplo. Documentación de la API: http://localhost:8000/docs
+### Base de datos (Supabase)
+
+En `backend/.env` coloca la URL de Supabase (**Connect → Direct → Session pooler**, puerto 5432) con la contraseña real:
+
+```
+DATABASE_URL=postgresql://postgres.xxxxxxxx:CONTRASEÑA@aws-0-us-east-1.pooler.supabase.com:5432/postgres
+```
+
+Para cargar en la base el contenido académico que falte (rutas, actividades, autoevaluación y retos):
+
+```bash
+.venv\Scripts\python -m app.cargar_contenido            # simulación: muestra lo que agregaría
+.venv\Scripts\python -m app.cargar_contenido --aplicar  # lo guarda
+```
+
+Sin `DATABASE_URL` de Supabase se usa SQLite local (`pasteur.db`), que se crea sola con datos de ejemplo.
+Documentación de la API: http://localhost:8000/docs
 
 **Frontend** (puerto 5173, redirige `/api` al backend):
 
@@ -63,14 +81,10 @@ npm run dev
 
 Abre http://localhost:5173
 
-### Usuario de prueba
+### Usuarios
 
-| Usuario | DNI | Contraseña |
-|---|---|---|
-| `joaquin` (Joaquín Paredes · 5to Sec. B) | `70000001` | `pasteur2026` |
-
-Compañeros de salón para el ranking: `valeria`, `diego`, `camila`, `mateo`, `lucia` (misma contraseña).
-Para volver a los datos iniciales borra `backend/pasteur.db`.
+- **Supabase:** se ingresa con los usuarios registrados en la tabla `usuarios` (contraseñas en bcrypt).
+- **SQLite local (modo demo):** usuario `joaquin` / DNI `70000001`, contraseña `pasteur2026`. Compañeros: `valeria`, `diego`, `camila`, `mateo`, `lucia` (misma contraseña). Para reiniciar los datos borra `backend/pasteur.db`.
 
 ## Pantallas y lógica
 
