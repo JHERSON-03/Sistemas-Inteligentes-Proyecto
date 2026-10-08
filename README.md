@@ -95,7 +95,7 @@ Abre http://localhost:5173
 | Inicio / Dashboard | `/` | Racha, puntos, horas de la semana vs. meta, temas dominados, racha semanal L–D, avance por curso, siguiente paso de la IA, reto del día (+10 pts, uno por día), logros, ranking del salón |
 | Tutor IA Socrático | `/tutor` | Chat por curso con historial guardado, sugerencias, reiniciar diálogo, +5 pts por sesión. Nunca da la respuesta directa |
 | Rutas Adaptativas | `/rutas`, `/rutas/:id` | Filtros por curso, progreso, nivel básico/intermedio/avanzado según aciertos al primer intento, ruta recomendada por la IA, actividades con pista al fallar, +10 pts por actividad y bonus al terminar la ruta |
-| Autoevaluación | `/autoevaluacion` | 5 preguntas de cinemática, nivel de confianza, retroalimentación verde/naranja, +10 pts por acierto, resumen final |
+| Autoevaluación | `/autoevaluacion` | Selector de evaluaciones (p. ej. "Rapidez y movimiento", 5 preguntas), nivel de confianza, retroalimentación verde/naranja, +10 pts por acierto, resumen final |
 | Mis Métricas | `/metricas` | Avance por curso, uso del tiempo, racha, puntos, nivel de autonomía (1–4), comentario de la IA y calendario del mes |
 
 ### Reglas de racha y puntos

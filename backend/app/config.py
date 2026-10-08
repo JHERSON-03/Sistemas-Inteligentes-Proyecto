@@ -9,6 +9,9 @@ DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./pasteur.db")
 FRONTEND_ORIGIN = os.getenv("FRONTEND_ORIGIN", "http://localhost:5173")
 TOKEN_HOURS = 12
 
+# Grado al que está dirigida la plataforma
+GRADE = "1ro Sec."
+
 # Tutor IA: proveedor con API compatible con OpenAI.
 #   groq -> Groq (plan gratuito, modelos Llama)   https://console.groq.com/keys
 #   xai  -> xAI Grok                               https://console.x.ai

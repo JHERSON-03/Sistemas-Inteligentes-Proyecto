@@ -1,19 +1,26 @@
 """Agrega a la base de datos el contenido académico que falte (rutas, actividades, evaluación y retos).
 
-Solo inserta lo que no existe: no modifica ni borra usuarios, progreso, mensajes ni contenido existente.
+Por defecto solo inserta lo que no existe: no modifica ni borra usuarios, progreso, mensajes ni contenido existente.
 
 Uso (desde la carpeta backend):
     .venv\\Scripts\\python -m app.cargar_contenido            # muestra lo que agregaría (no escribe)
     .venv\\Scripts\\python -m app.cargar_contenido --aplicar  # lo guarda en la base de datos
+
+Con --reemplazar además elimina el contenido que ya no está en seed.py (con su progreso y respuestas) y
+actualiza el grado de los usuarios. Antes de borrar guarda un respaldo JSON en backend/respaldos/.
 """
 import difflib
+import json
 import sys
 import unicodedata
+from datetime import datetime
+from pathlib import Path
 
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from . import models
+from .config import GRADE
 from .database import Base, SessionLocal, engine
 from .seed import ASSESSMENT, CHALLENGES, COURSES, ROUTES
 
@@ -89,11 +96,82 @@ def sync_content(db: Session) -> list[str]:
     return log
 
 
+def _row(obj) -> dict:
+    return {c.key: getattr(obj, c.key) for c in obj.__mapper__.column_attrs}
+
+
+def remove_obsolete(db: Session, backup: dict) -> list[str]:
+    """Quita el contenido que ya no está en seed.py (y el progreso/respuestas ligados), guardando un respaldo."""
+    log: list[str] = []
+    route_titles = {title.lower() for _, title, *_ in ROUTES}
+    for route in db.scalars(select(models.LearningRoute)).all():
+        if route.title.lower() in route_titles:
+            continue
+        act_ids = [a.id for a in route.activities]
+        progress = db.scalars(select(models.ActivityProgress).where(
+            models.ActivityProgress.activity_id.in_(act_ids))).all() if act_ids else []
+        backup["progreso_actividad"] += [_row(p) for p in progress]
+        backup["actividades"] += [_row(a) for a in route.activities]
+        backup["rutas"].append(_row(route))
+        for p in progress:
+            db.delete(p)
+        for a in route.activities:
+            db.delete(a)
+        db.delete(route)
+        log.append(f"- ruta {route.title} ({len(act_ids)} actividades, {len(progress)} progresos)")
+
+    _, assessment_title, _ = ASSESSMENT
+    for a in db.scalars(select(models.Assessment)).all():
+        if a.title.lower() == assessment_title.lower():
+            continue
+        q_ids = [q.id for q in a.questions]
+        answers = db.scalars(select(models.AssessmentAnswer).where(
+            models.AssessmentAnswer.question_id.in_(q_ids))).all() if q_ids else []
+        backup["respuestas_evaluacion"] += [_row(x) for x in answers]
+        backup["preguntas_evaluacion"] += [_row(q) for q in a.questions]
+        backup["evaluaciones"].append(_row(a))
+        for x in answers:
+            db.delete(x)
+        for q in a.questions:
+            db.delete(q)
+        db.delete(a)
+        log.append(f"- autoevaluación {a.title} ({len(q_ids)} preguntas, {len(answers)} respuestas)")
+
+    for ch in db.scalars(select(models.DailyChallenge)).all():
+        if any(_similar(ch.question, q) for _, q, *_ in CHALLENGES):
+            continue
+        answers = db.scalars(select(models.ChallengeAnswer).where(models.ChallengeAnswer.challenge_id == ch.id)).all()
+        backup["respuestas_reto"] += [_row(x) for x in answers]
+        backup["retos_diarios"].append(_row(ch))
+        for x in answers:
+            db.delete(x)
+        db.delete(ch)
+        log.append(f"- reto {ch.question} ({len(answers)} respuestas)")
+
+    for u in db.scalars(select(models.User).where(models.User.grade != GRADE)).all():
+        backup["usuarios_grado"].append({"id": u.id, "usuario": u.username, "grado": u.grade})
+        log.append(f"~ usuario {u.username}: grado {u.grade} → {GRADE}")
+        u.grade = GRADE
+    db.flush()
+    return log
+
+
 def main() -> None:
     apply = "--aplicar" in sys.argv
+    replace = "--reemplazar" in sys.argv
     Base.metadata.create_all(bind=engine)
     with SessionLocal() as db:
-        log = sync_content(db)
+        backup = {k: [] for k in ("rutas", "actividades", "progreso_actividad", "evaluaciones",
+                                  "preguntas_evaluacion", "respuestas_evaluacion", "retos_diarios",
+                                  "respuestas_reto", "usuarios_grado")}
+        log = remove_obsolete(db, backup) if replace else []
+        if apply and log:
+            folder = Path(__file__).resolve().parent.parent / "respaldos"
+            folder.mkdir(exist_ok=True)
+            path = folder / f"respaldo_{datetime.now():%Y%m%d_%H%M%S}.json"
+            path.write_text(json.dumps(backup, ensure_ascii=False, indent=2, default=str), encoding="utf-8")
+            print(f"Respaldo de lo eliminado: {path}\n")
+        log += sync_content(db)
         print("\n".join(log) if log else "No falta contenido: la base ya está completa.")
         if apply and log:
             db.commit()

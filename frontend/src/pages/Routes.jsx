@@ -62,7 +62,7 @@ export default function RoutesPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-extrabold">Mis rutas de aprendizaje · 5to de Secundaria</h1>
+        <h1 className="text-2xl font-extrabold">Mis rutas de aprendizaje · 1ro de Secundaria</h1>
         <p className="text-muted">Los módulos se ajustan a tu ritmo</p>
       </div>
       <div className="flex flex-wrap gap-2">
