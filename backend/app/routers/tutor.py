@@ -26,6 +26,15 @@ def greeting(first_name: str) -> str:
             "el trabajo por ti. ¿Sobre qué tema quieres reflexionar hoy?")
 
 
+# En la base de datos el emisor se guarda como "alumno" / "tutor"
+DB_ROLE = {"user": "alumno", "assistant": "tutor"}
+API_ROLE = {"alumno": "user", "tutor": "assistant", "user": "user", "assistant": "assistant"}
+
+
+def as_api(m: models.TutorMessage) -> dict:
+    return {"role": API_ROLE.get(m.role, "user"), "content": m.content}
+
+
 def session_messages(db: Session, user_id: int, session_id: str) -> list[models.TutorMessage]:
     return db.scalars(select(models.TutorMessage).where(
         models.TutorMessage.user_id == user_id, models.TutorMessage.session_id == session_id
@@ -45,7 +54,7 @@ def current_session(course: str = "matematica", user: models.User = Depends(curr
         "session_id": session_id,
         "course": course,
         "greeting": greeting(user.full_name.split()[0]),
-        "messages": [{"role": m.role, "content": m.content} for m in msgs],
+        "messages": [as_api(m) for m in msgs],
         "suggestions": SUGGESTIONS,
         "points_per_session": POINTS_TUTOR_SESSION,
     }
@@ -61,14 +70,14 @@ def reset(data: TutorResetIn, user: models.User = Depends(current_user)):
 def send_message(data: TutorMessageIn, user: models.User = Depends(current_user), db: Session = Depends(get_db)):
     session_id = data.session_id or uuid.uuid4().hex
     previous = session_messages(db, user.id, session_id)
-    history = [{"role": m.role, "content": m.content} for m in previous]
+    history = [as_api(m) for m in previous]
     history.append({"role": "user", "content": data.message.strip()})
 
     reply, engine = tutor_reply(history, user.full_name.split()[0], data.course)
 
-    db.add(models.TutorMessage(user_id=user.id, session_id=session_id, course=data.course, role="user",
+    db.add(models.TutorMessage(user_id=user.id, session_id=session_id, course=data.course, role=DB_ROLE["user"],
                                content=data.message.strip()))
-    db.add(models.TutorMessage(user_id=user.id, session_id=session_id, course=data.course, role="assistant",
+    db.add(models.TutorMessage(user_id=user.id, session_id=session_id, course=data.course, role=DB_ROLE["assistant"],
                                content=reply))
     earned = gamification.add_points(user, POINTS_TUTOR_SESSION) if not previous else 0
     gamification.log_study(db, user, "tutor", MINUTES_TUTOR_MESSAGE)

@@ -12,9 +12,16 @@ from ..services import gamification
 router = APIRouter(prefix="/api/assessments", tags=["autoevaluacion"])
 
 CONFIDENCE_TIPS = {
-    ("muy", False): "Estabas muy seguro: revisa con calma en qué paso cambió tu razonamiento.",
-    ("nada", True): "¡Acertaste aunque dudabas! Confía más en tu razonamiento.",
+    ("alta", False): "Estabas muy seguro: revisa con calma en qué paso cambió tu razonamiento.",
+    ("baja", True): "¡Acertaste aunque dudabas! Confía más en tu razonamiento.",
 }
+
+
+def option_out(opt) -> dict:
+    """Las opciones se guardan como {"texto", "razon"}; también acepta texto plano."""
+    if isinstance(opt, str):
+        return {"text": opt, "reason": ""}
+    return {"text": opt.get("texto", opt.get("text", "")), "reason": opt.get("razon", opt.get("reason", ""))}
 
 
 @router.get("")
@@ -33,7 +40,8 @@ def get_assessment(assessment_id: int, user: models.User = Depends(current_user)
     return {
         "id": a.id, "title": a.title,
         "course": {"slug": a.course.slug, "name": a.course.name, "color": a.course.color},
-        "questions": [{"id": q.id, "order": q.order, "situation": q.situation, "options": q.options}
+        "questions": [{"id": q.id, "order": q.order, "situation": q.situation,
+                       "options": [option_out(o) for o in q.options]}
                       for q in a.questions],
     }
 

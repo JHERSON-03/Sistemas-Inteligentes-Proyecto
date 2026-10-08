@@ -64,7 +64,7 @@ def answer_activity(activity_id: int, data: OptionIn, user: models.User = Depend
         prog.correct_first_try = prog.attempts == 1
         prog.completed_at = datetime.utcnow()
         earned += gamification.add_points(user, POINTS_ACTIVITY)
-        gamification.log_study(db, user, "rutas", MINUTES_ACTIVITY)
+        gamification.log_study(db, user, "ruta", MINUTES_ACTIVITY)
         db.flush()
         route = activity.route
         summary = adaptive.route_summary(route, adaptive.progress_map(db, user))
