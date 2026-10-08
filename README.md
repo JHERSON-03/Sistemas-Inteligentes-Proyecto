@@ -86,6 +86,27 @@ Abre http://localhost:5173
 - **Supabase:** se ingresa con los usuarios registrados en la tabla `usuarios` (contraseñas en bcrypt).
 - **SQLite local (modo demo):** usuario `joaquin` / DNI `70000001`, contraseña `pasteur2026`. Compañeros: `valeria`, `diego`, `camila`, `mateo`, `lucia` (misma contraseña). Para reiniciar los datos borra `backend/pasteur.db`.
 
+## Publicar en Vercel (frontend + backend 24/7)
+
+El proyecto se publica como **un solo proyecto de Vercel** usando *Services* (configurado en `vercel.json`):
+el frontend (Vite) atiende todas las páginas y las peticiones a `/api/...` van al backend FastAPI.
+
+1. En https://vercel.com inicia sesión con GitHub y elige **Add New → Project**.
+2. Importa el repositorio `Sistemas-Inteligentes-Proyecto`. Deja la carpeta raíz (*Root Directory*) en `./`.
+3. En **Environment Variables** agrega:
+
+   | Variable | Valor |
+   |---|---|
+   | `DATABASE_URL` | URL de Supabase en modo **Transaction pooler** (puerto **6543**), con la contraseña real |
+   | `LLM_API_KEY` | API key de Groq |
+   | `SECRET_KEY` | Texto largo y aleatorio (mínimo 32 caracteres) para firmar las sesiones |
+   | `LLM_PROVIDER` | `groq` (opcional) |
+
+4. Presiona **Deploy**. Cada `git push` a `main` vuelve a publicar automáticamente.
+
+> En Vercel el backend no crea tablas al arrancar (la base de Supabase ya está lista). Para cargar o reemplazar
+> contenido usa `cargar_contenido` desde tu PC.
+
 ## Pantallas y lógica
 
 | Pantalla | Ruta | Lógica |

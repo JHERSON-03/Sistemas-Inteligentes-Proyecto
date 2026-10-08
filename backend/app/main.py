@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .config import FRONTEND_ORIGIN
+from .config import FRONTEND_ORIGIN, INIT_DB
 from .database import Base, SessionLocal, engine
 from .routers import assessment, auth, dashboard, metrics, routes, tutor
 from .seed import seed
@@ -11,9 +11,10 @@ from .seed import seed
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
-    Base.metadata.create_all(bind=engine)
-    with SessionLocal() as db:
-        seed(db)
+    if INIT_DB:
+        Base.metadata.create_all(bind=engine)
+        with SessionLocal() as db:
+            seed(db)
     yield
 
 

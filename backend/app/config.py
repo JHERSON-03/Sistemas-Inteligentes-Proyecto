@@ -9,6 +9,12 @@ DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./pasteur.db")
 FRONTEND_ORIGIN = os.getenv("FRONTEND_ORIGIN", "http://localhost:5173")
 TOKEN_HOURS = 12
 
+# En Vercel cada petición puede arrancar una función nueva (serverless)
+SERVERLESS = bool(os.getenv("VERCEL"))
+# Crear tablas y datos iniciales al arrancar. En Vercel se omite: la base de Supabase ya está lista
+# y así cada arranque en frío es más rápido. Forzar con INIT_DB=1.
+INIT_DB = os.getenv("INIT_DB", "0" if SERVERLESS else "1") == "1"
+
 # Grado al que está dirigida la plataforma
 GRADE = "1ro Sec."
 
