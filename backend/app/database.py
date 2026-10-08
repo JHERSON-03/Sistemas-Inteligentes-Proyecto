@@ -1,7 +1,8 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
+from sqlalchemy.pool import NullPool
 
-from .config import DATABASE_URL
+from .config import DATABASE_URL, SERVERLESS
 
 
 def _normalize(url: str) -> str:
@@ -16,8 +17,13 @@ def _normalize(url: str) -> str:
 DB_URL = _normalize(DATABASE_URL)
 IS_SQLITE = DB_URL.startswith("sqlite")
 
+PG_ARGS = {"prepare_threshold": None, "connect_timeout": 10}
+
 if IS_SQLITE:
     engine = create_engine(DB_URL, connect_args={"check_same_thread": False})
+elif SERVERLESS:
+    # En Vercel no se guardan conexiones abiertas: el pooler de Supabase (puerto 6543) las reutiliza.
+    engine = create_engine(DB_URL, poolclass=NullPool, connect_args=PG_ARGS)
 else:
     # Supabase cierra conexiones inactivas: pre_ping las revisa antes de usarlas.
     # prepare_threshold=None evita errores con el pooler de Supabase (modo transacción).
@@ -27,7 +33,7 @@ else:
         pool_size=5,
         max_overflow=5,
         pool_recycle=300,
-        connect_args={"prepare_threshold": None, "connect_timeout": 10},
+        connect_args=PG_ARGS,
     )
 
 SessionLocal = sessionmaker(bind=engine, autoflush=False, expire_on_commit=False)
