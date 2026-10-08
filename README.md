@@ -1,5 +1,7 @@
 # Pasteur Learn · Laredo 2026
 
+> Sistemas-Inteligentes-Proyecto: un proyecto de la universidad para desarrollar grupalmente.
+
 Plataforma de aprendizaje autónomo con Tutor IA para alumnos de 5to de secundaria del Colegio Louis Pasteur (Laredo, Perú).
 Las pantallas provienen del proyecto de Google Stitch **"Dark Theme Interactive WebApp"** y del prompt en [docs/prompt-stitch-pasteur.md](docs/prompt-stitch-pasteur.md).
 
