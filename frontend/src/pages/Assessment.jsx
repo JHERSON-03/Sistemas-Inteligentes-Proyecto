@@ -116,7 +116,7 @@ export default function Assessment() {
           const isWrong = result && i === selected && !result.correct
           return (
             <button key={i} disabled={!!result} onClick={() => setSelected(i)}
-              className={`card flex w-full items-center gap-4 p-4 text-left transition ${
+              className={`card flex w-full items-center gap-4 border-2 border-transparent p-4 text-left transition ${
                 isRight ? '!border-success bg-success/10' : isWrong ? '!border-streak bg-streak/10'
                   : selected === i ? '!border-primary bg-primary/10' : 'hover:bg-navy/5'}`}>
               <span className={`grid h-6 w-6 shrink-0 place-items-center rounded-full border-2 ${selected === i ? 'border-primary' : 'border-line'}`}>

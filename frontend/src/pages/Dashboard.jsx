@@ -148,8 +148,8 @@ export default function Dashboard() {
               const { Icon } = courseBySlug(c.slug)
               return (
                 <Link key={c.slug} to={`/rutas?curso=${c.slug}`}
-                  className="rounded-xl border border-line p-3 transition hover:-translate-y-0.5 hover:bg-navy/5"
-                  style={{ borderTopColor: c.color, borderTopWidth: 3 }}>
+                  className="rounded-xl bg-bg p-3 transition hover:-translate-y-0.5 hover:bg-navy/5"
+                  style={{ borderTop: `3px solid ${c.color}` }}>
                   <span className="mb-2 grid h-9 w-9 place-items-center rounded-lg" style={{ background: `${c.color}22`, color: c.color }}>
                     <Icon size={18} />
                   </span>

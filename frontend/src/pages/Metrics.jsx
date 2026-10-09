@@ -93,7 +93,7 @@ export default function Metrics() {
       </div>
 
       <div className="grid gap-4 lg:grid-cols-[1fr_360px]">
-        <section className="flex h-fit gap-4 rounded-card border border-primary/30 bg-primary/10 p-5">
+        <section className="flex h-fit gap-4 rounded-card bg-primary/10 p-5">
           <img src="/img/robot-tutor.jpg" alt="" className="h-14 w-14 shrink-0 rounded-2xl object-cover" />
           <div>
             <h2 className="mb-1 flex items-center gap-2 font-extrabold text-primary-soft"><Bot size={18} /> Comentario de la IA</h2>

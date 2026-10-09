@@ -8,7 +8,7 @@
 }
 
 @layer components {
-  .card { @apply bg-card border border-line rounded-card shadow-soft; }
+  .card { @apply bg-card rounded-card shadow-soft; }
   .btn { @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 font-bold transition active:scale-[.98] disabled:opacity-50 disabled:cursor-not-allowed; }
   .btn-primary { @apply btn bg-primary text-primary-ink hover:bg-primary-hover; }
   .btn-gold { @apply btn bg-accent text-navy hover:bg-accent-hover; }
