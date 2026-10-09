@@ -51,7 +51,7 @@ export default function Register() {
           <Logo size="lg" />
           <div>
             <h1 className="text-2xl font-extrabold">Activa tu cuenta</h1>
-            <p className="text-muted">Pasteur Learn · 1ro de secundaria</p>
+            <p className="text-muted">Louis Pasteur · 1ro de secundaria</p>
           </div>
         </div>
 

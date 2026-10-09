@@ -25,7 +25,7 @@ export default function Layout() {
           <button onClick={() => navigate('/')} className="flex items-center gap-3">
             <Logo />
             <div className="text-left leading-tight">
-              <div className="whitespace-nowrap text-lg font-extrabold">Pasteur Learn</div>
+              <div className="whitespace-nowrap text-lg font-extrabold">Louis Pasteur</div>
               <span className="text-xs font-bold text-muted">Laredo 2026</span>
             </div>
           </button>

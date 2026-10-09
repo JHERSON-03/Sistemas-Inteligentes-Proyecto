@@ -20,7 +20,7 @@
       "problemMatcher": []
     },
     {
-      "label": "Iniciar Pasteur Learn",
+      "label": "Iniciar Louis Pasteur",
       "dependsOn": ["Backend", "Frontend"],
       "dependsOrder": "parallel",
       "group": { "kind": "build", "isDefault": true },

@@ -1,4 +1,4 @@
-# Pasteur Learn · Laredo 2026
+# Louis Pasteur · Laredo 2026
 
 > Sistemas-Inteligentes-Proyecto: un proyecto de la universidad para desarrollar grupalmente.
 

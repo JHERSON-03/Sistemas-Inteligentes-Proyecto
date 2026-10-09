@@ -1,12 +1,12 @@
 @echo off
-title Pasteur Learn
+title Louis Pasteur
 cd /d "%~dp0"
 
 echo Iniciando el backend (puerto 8000)...
-start "Pasteur Learn - BACKEND (no cerrar)" cmd /k "cd /d "%~dp0backend" && .venv\Scripts\python -m uvicorn app.main:app --reload --port 8000"
+start "Louis Pasteur - BACKEND (no cerrar)" cmd /k "cd /d "%~dp0backend" && .venv\Scripts\python -m uvicorn app.main:app --reload --port 8000"
 
 echo Iniciando el frontend (puerto 5173)...
-start "Pasteur Learn - FRONTEND (no cerrar)" cmd /k "cd /d "%~dp0frontend" && npm.cmd run dev"
+start "Louis Pasteur - FRONTEND (no cerrar)" cmd /k "cd /d "%~dp0frontend" && npm.cmd run dev"
 
 echo Esperando a que todo cargue...
 timeout /t 8 /nobreak >nul

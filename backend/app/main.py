@@ -18,7 +18,7 @@ async def lifespan(_: FastAPI):
     yield
 
 
-app = FastAPI(title="Pasteur Learn API", version="1.0.0", lifespan=lifespan,
+app = FastAPI(title="Louis Pasteur API", version="1.0.0", lifespan=lifespan,
               description="Backend de la plataforma de aprendizaje autónomo del Colegio Louis Pasteur de Laredo")
 
 app.add_middleware(

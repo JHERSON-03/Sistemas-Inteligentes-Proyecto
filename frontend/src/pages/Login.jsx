@@ -57,7 +57,7 @@ export default function Login() {
         <form onSubmit={submit} className="card animate-pop w-full max-w-md space-y-5 p-8" noValidate>
           <div className="flex flex-col items-center text-center">
             <Logo size="lg" />
-            <h1 className="mt-4 text-2xl font-extrabold">Bienvenido a Pasteur Learn</h1>
+            <h1 className="mt-4 text-2xl font-extrabold">Bienvenido a Louis Pasteur</h1>
             <p className="mt-1 text-muted">Solo para estudiantes de 1ro de secundaria</p>
           </div>
 
