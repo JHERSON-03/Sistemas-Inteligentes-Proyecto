@@ -1,7 +1,7 @@
 import uuid
 
 from fastapi import APIRouter, Depends
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.orm import Session
 
 from .. import models
@@ -44,9 +44,10 @@ def session_messages(db: Session, user_id: int, session_id: str) -> list[models.
 @router.get("/session")
 def current_session(course: str = "matematica", user: models.User = Depends(current_user),
                     db: Session = Depends(get_db)):
-    """Retoma la última conversación del curso o abre una nueva."""
+    """Retoma la última conversación no archivada del curso o abre una nueva."""
     last = db.scalar(select(models.TutorMessage).where(
-        models.TutorMessage.user_id == user.id, models.TutorMessage.course == course
+        models.TutorMessage.user_id == user.id, models.TutorMessage.course == course,
+        models.TutorMessage.archived.is_(False),
     ).order_by(models.TutorMessage.id.desc()))
     session_id = last.session_id if last else uuid.uuid4().hex
     msgs = session_messages(db, user.id, session_id) if last else []
@@ -61,7 +62,13 @@ def current_session(course: str = "matematica", user: models.User = Depends(curr
 
 
 @router.post("/reset")
-def reset(data: TutorResetIn, user: models.User = Depends(current_user)):
+def reset(data: TutorResetIn, user: models.User = Depends(current_user), db: Session = Depends(get_db)):
+    """Archiva la conversación del curso: deja de mostrarse, pero se conserva para analizar las preguntas."""
+    db.execute(update(models.TutorMessage).where(
+        models.TutorMessage.user_id == user.id, models.TutorMessage.course == data.course,
+        models.TutorMessage.archived.is_(False),
+    ).values(archived=True))
+    db.commit()
     return {"session_id": uuid.uuid4().hex, "course": data.course, "greeting": greeting(user.full_name.split()[0]),
             "messages": []}
 

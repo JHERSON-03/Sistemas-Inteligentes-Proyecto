@@ -153,6 +153,8 @@ class TutorMessage(Base):
     course: Mapped[str] = mapped_column("curso", String(30))
     role: Mapped[str] = mapped_column("emisor", String(10))  # "alumno" | "tutor"
     content: Mapped[str] = mapped_column("contenido", Text)
+    # Al reiniciar el diálogo la conversación se archiva (no se borra) para poder analizar las preguntas
+    archived: Mapped[bool] = mapped_column("archivado", Boolean, default=False, server_default="false")
     created_at: Mapped[datetime] = mapped_column("creado_en", DateTime, default=datetime.utcnow,
                                                  server_default=func.now())
 
