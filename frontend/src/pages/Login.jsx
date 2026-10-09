@@ -99,7 +99,7 @@ export default function Login() {
             {forgotMsg && <p className="mt-2 text-sm text-muted">{forgotMsg}</p>}
           </div>
 
-          <div className="flex gap-3 rounded-xl border border-primary/30 bg-primary/10 p-3 text-sm text-[#b5c4ff]">
+          <div className="flex gap-3 rounded-xl border border-primary/30 bg-primary/10 p-3 text-sm text-primary-soft">
             <Info size={18} className="shrink-0" />
             <p>Si no tienes cuenta, pídela a tu tutor o docente. ¿Ya tienes tu código? <Link to="/registro" className="font-bold underline">Actívala aquí</Link>.</p>
           </div>

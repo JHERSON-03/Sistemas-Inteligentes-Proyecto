@@ -37,7 +37,7 @@ function Bubble({ role, children }) {
     <div className={`flex items-end gap-2 ${mine ? 'justify-end' : ''}`}>
       {!mine && <img src="/img/robot-tutor.jpg" alt="" className="h-8 w-8 shrink-0 rounded-full object-cover" />}
       <div className={`max-w-[80%] whitespace-pre-wrap rounded-2xl px-4 py-3 leading-relaxed ${
-        mine ? 'rounded-br-md bg-primary text-white' : 'rounded-bl-md bg-[#262938] text-ink'}`}>
+        mine ? 'rounded-br-md bg-primary text-primary-ink' : 'rounded-bl-md bg-card-2 text-ink'}`}>
         {children}
       </div>
     </div>
@@ -127,7 +127,7 @@ export default function Tutor() {
         </div>
       </header>
 
-      <div className="flex gap-3 border-b border-primary/20 bg-primary/10 px-4 py-3 text-sm text-[#b5c4ff]">
+      <div className="flex gap-3 border-b border-primary/20 bg-primary/10 px-4 py-3 text-sm text-primary-soft">
         <Info size={18} className="shrink-0" />
         <p><b>Método socrático:</b> el tutor no te da la respuesta directa; te guía con preguntas y pistas para que la descubras tú.</p>
       </div>
@@ -157,7 +157,7 @@ export default function Tutor() {
         {session && messages.length === 0 && (
           <div className="flex flex-wrap gap-2">
             {session.suggestions.map((s) => (
-              <button key={s} onClick={() => send(s)} disabled={busy} className="chip border border-tutor/40 bg-tutor/10 text-[#c7bfff] hover:bg-tutor/20">{s}</button>
+              <button key={s} onClick={() => send(s)} disabled={busy} className="chip border border-tutor/40 bg-tutor/10 text-tutor-soft hover:bg-tutor/20">{s}</button>
             ))}
           </div>
         )}

@@ -1,4 +1,4 @@
-import { BookOpen, Calculator, FlaskConical, GraduationCap, Landmark, Loader2 } from 'lucide-react'
+import { BookOpen, Calculator, FlaskConical, Landmark, Loader2 } from 'lucide-react'
 
 export const COURSES = [
   { slug: 'historia', name: 'Historia', color: '#F59E0B', Icon: Landmark },
@@ -9,17 +9,16 @@ export const COURSES = [
 
 export const courseBySlug = (slug) => COURSES.find((c) => c.slug === slug) || COURSES[0]
 
+/** Escudo del I.E.P. Louis Pasteur. lg: portada de login/registro · md: icono junto al nombre en la barra superior */
 export function Logo({ size = 'md' }) {
-  const box = size === 'lg' ? 'h-14 w-14' : 'h-10 w-10'
-  const icon = size === 'lg' ? 30 : 22
+  const box = size === 'lg' ? 'h-28 w-28 sm:h-32 sm:w-32' : 'h-12 w-12'
   return (
-    <div className={`${box} grid place-items-center rounded-2xl bg-gradient-to-br from-primary to-tutor text-white shadow-soft`}>
-      <GraduationCap size={icon} />
-    </div>
+    <img src="/img/logo-pasteur.png" alt="Escudo del I.E.P. Louis Pasteur de Laredo"
+      className={`${box} shrink-0 object-contain drop-shadow-lg`} />
   )
 }
 
-export function ProgressBar({ value, color = '#4F7CFF', height = 'h-2' }) {
+export function ProgressBar({ value, color = '#C8B83A', height = 'h-2' }) {
   const pct = Math.max(0, Math.min(100, value))
   return (
     <div className={`${height} w-full overflow-hidden rounded-full bg-white/10`} role="progressbar" aria-valuenow={pct}

@@ -40,7 +40,7 @@ export default function Layout() {
             </span>
             <div className="relative">
               <button onClick={() => setMenu((m) => !m)} className="flex items-center gap-2 rounded-full p-1 pr-3 hover:bg-white/5">
-                <span className="grid h-9 w-9 place-items-center rounded-full bg-tutor/30 text-sm font-extrabold text-[#c7bfff]">
+                <span className="grid h-9 w-9 place-items-center rounded-full bg-tutor/30 text-sm font-extrabold text-tutor-soft">
                   {initials}
                 </span>
                 <span className="hidden text-sm font-bold md:inline">
@@ -64,7 +64,7 @@ export default function Layout() {
             <NavLink key={to} to={to} end={end}
               className={({ isActive }) =>
                 `flex shrink-0 items-center gap-2 rounded-xl px-4 py-2 text-sm font-bold transition ${
-                  isActive ? 'bg-primary text-white' : 'text-muted hover:bg-white/5 hover:text-ink'}`}>
+                  isActive ? 'bg-primary text-primary-ink' : 'text-muted hover:bg-white/5 hover:text-ink'}`}>
               <Icon size={16} /> {label}
             </NavLink>
           ))}

@@ -68,7 +68,7 @@ export default function Assessment() {
     <div className="mx-auto flex max-w-3xl flex-wrap gap-2">
       {list.data.map((a) => (
         <button key={a.id} onClick={() => choose(a.id)}
-          className={`chip border px-4 py-2 ${a.id === activeId ? 'border-primary bg-primary text-white' : 'border-line text-muted hover:text-ink'}`}>
+          className={`chip border px-4 py-2 ${a.id === activeId ? 'border-primary bg-primary text-primary-ink' : 'border-line text-muted hover:text-ink'}`}>
           {a.title} · {a.questions} {a.questions === 1 ? 'pregunta' : 'preguntas'}
         </button>
       ))}
@@ -97,10 +97,10 @@ export default function Assessment() {
         <p className="text-xs font-extrabold uppercase tracking-widest text-tutor">Evaluación autónoma formativa</p>
         <div className="mt-1 flex flex-wrap items-center justify-between gap-2">
           <h1 className="text-2xl font-extrabold">{data.title}</h1>
-          <span className="chip bg-primary/15 text-[#b5c4ff]">Pregunta {index + 1} de {total}</span>
+          <span className="chip bg-primary/15 text-primary-soft">Pregunta {index + 1} de {total}</span>
         </div>
         <p className="mt-1 text-sm text-muted">Esta prueba no es una nota; sirve para ver cómo razonas.</p>
-        <div className="mt-3"><ProgressBar value={((index + (result ? 1 : 0)) / total) * 100} color="#8B7BFF" height="h-2.5" /></div>
+        <div className="mt-3"><ProgressBar value={((index + (result ? 1 : 0)) / total) * 100} color="#6F8FD6" height="h-2.5" /></div>
       </div>
 
       <div className="card overflow-hidden">
@@ -134,7 +134,7 @@ export default function Assessment() {
           {CONFIDENCE.map((c) => (
             <button key={c.value} disabled={!!result} onClick={() => setConfidence(c.value)}
               className={`rounded-xl border px-3 py-2.5 text-sm font-bold transition ${
-                confidence === c.value ? 'border-tutor bg-tutor/20 text-[#c7bfff]' : 'border-line text-muted hover:bg-white/5'}`}>
+                confidence === c.value ? 'border-tutor bg-tutor/20 text-tutor-soft' : 'border-line text-muted hover:bg-white/5'}`}>
               {c.label}
             </button>
           ))}

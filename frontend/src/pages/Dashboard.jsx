@@ -93,11 +93,11 @@ export default function Dashboard() {
   return (
     <div className="space-y-5">
       {/* 1. Banner de bienvenida */}
-      <section className="relative overflow-hidden rounded-card bg-gradient-to-r from-[#1b2a6b] via-[#2a2580] to-[#5b3fd1] p-6 shadow-soft md:p-8">
+      <section className="relative overflow-hidden rounded-card bg-gradient-to-r from-card via-navy to-[#3A5596] border border-primary/30 p-6 shadow-soft md:p-8">
         <img src="/img/banner-1ro.jpg" alt="" className="absolute inset-y-0 right-0 hidden h-full w-1/2 object-cover opacity-40 [mask-image:linear-gradient(to_left,black,transparent)] md:block" />
         <div className="relative max-w-xl">
           <h1 className="text-2xl font-extrabold md:text-3xl">¡Hola, {user.first_name}! Sigue con tu aprendizaje hoy 👋</h1>
-          <p className="mt-2 text-[#d6dbff]">
+          <p className="mt-2 text-tutor-soft">
             Llevas {stats.streak} {stats.streak === 1 ? 'día' : 'días'} seguidos estudiando. ¡No rompas tu racha!
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
@@ -113,9 +113,9 @@ export default function Dashboard() {
       <section className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <StatCard Icon={Flame} color="#FB923C" title="Racha" value={`${stats.streak} días seguidos`}
           sub={`Tu récord: ${stats.best_streak} días`} progress={(stats.streak / Math.max(stats.best_streak, 1)) * 100} />
-        <StatCard Icon={Star} color="#FBBF24" title="Puntos" value={`${stats.points} pts`}
+        <StatCard Icon={Star} color="#E6CF4F" title="Puntos" value={`${stats.points} pts`}
           sub={`+${stats.weekly_points} pts esta semana`} progress={(stats.points % 1000) / 10} />
-        <StatCard Icon={Clock} color="#8B7BFF" title="Estudio de la semana" value={`${stats.week_hours} h`}
+        <StatCard Icon={Clock} color="#6F8FD6" title="Estudio de la semana" value={`${stats.week_hours} h`}
           sub={`Meta: ${stats.goal_hours} h`} progress={(stats.week_hours / stats.goal_hours) * 100} />
         <StatCard Icon={CheckCircle2} color="#34D399" title="Temas dominados" value={`${stats.topics_done} / ${stats.topics_total}`}
           sub="Actividades completadas" progress={(stats.topics_done / stats.topics_total) * 100} />

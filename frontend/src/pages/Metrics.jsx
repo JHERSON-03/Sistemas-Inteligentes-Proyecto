@@ -15,7 +15,7 @@ function Calendar({ cal }) {
         {WEEKDAYS.map((d, i) => <span key={i} className="pb-1 text-xs font-bold text-muted">{d}</span>)}
         {cells.map((day, i) => (
           <span key={i} className={`grid aspect-square place-items-center rounded-lg ${
-            !day ? '' : day === cal.today ? 'bg-primary font-extrabold text-white'
+            !day ? '' : day === cal.today ? 'bg-primary font-extrabold text-primary-ink'
               : studied.has(day) ? 'bg-streak/15' : 'text-muted'}`}>
             {day && (studied.has(day) && day !== cal.today ? '🔥' : day)}
           </span>
@@ -96,7 +96,7 @@ export default function Metrics() {
         <section className="flex h-fit gap-4 rounded-card border border-primary/30 bg-primary/10 p-5">
           <img src="/img/robot-tutor.jpg" alt="" className="h-14 w-14 shrink-0 rounded-2xl object-cover" />
           <div>
-            <h2 className="mb-1 flex items-center gap-2 font-extrabold text-[#b5c4ff]"><Bot size={18} /> Comentario de la IA</h2>
+            <h2 className="mb-1 flex items-center gap-2 font-extrabold text-primary-soft"><Bot size={18} /> Comentario de la IA</h2>
             <p className="leading-relaxed">{data.ai_comment}</p>
             <p className="mt-2 text-sm text-muted">Precisión general: {data.accuracy}% · Récord de racha: {data.best_streak} días</p>
           </div>

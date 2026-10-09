@@ -4,7 +4,7 @@ const ToastContext = createContext(null)
 
 const TONES = {
   success: 'border-success/40 bg-[#123326] text-success',
-  info: 'border-primary/40 bg-[#16224a] text-[#b5c4ff]',
+  info: 'border-primary/40 bg-card-2 text-primary-soft',
   warn: 'border-streak/40 bg-[#3a2410] text-streak',
 }
 

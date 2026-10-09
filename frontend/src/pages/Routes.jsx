@@ -6,7 +6,7 @@ import { useApi } from '../hooks/useApi'
 
 const LEVEL_STYLE = {
   'básico': 'bg-white/10 text-muted',
-  intermedio: 'bg-primary/15 text-[#b5c4ff]',
+  intermedio: 'bg-primary/15 text-primary-soft',
   avanzado: 'bg-success/15 text-success',
 }
 
@@ -27,7 +27,7 @@ function RouteCard({ r }) {
       <p className="mt-1 flex-1 text-sm text-muted">{r.description}</p>
 
       {r.recommended && (
-        <div className="mt-3 flex items-center gap-2 rounded-lg bg-tutor/15 px-3 py-2 text-xs font-bold text-[#c7bfff]">
+        <div className="mt-3 flex items-center gap-2 rounded-lg bg-tutor/15 px-3 py-2 text-xs font-bold text-tutor-soft">
           <Lock size={14} /> <Sparkles size={14} /> Recomendada por la IA
         </div>
       )}
@@ -68,7 +68,7 @@ export default function RoutesPage() {
       <div className="flex flex-wrap gap-2">
         {filters.map((f) => (
           <button key={f.slug} onClick={() => setParams(f.slug ? { curso: f.slug } : {})}
-            className={`chip border px-4 py-2 ${filter === f.slug ? 'border-primary bg-primary text-white' : 'border-line text-muted hover:text-ink'}`}>
+            className={`chip border px-4 py-2 ${filter === f.slug ? 'border-primary bg-primary text-primary-ink' : 'border-line text-muted hover:text-ink'}`}>
             {f.name}
           </button>
         ))}
