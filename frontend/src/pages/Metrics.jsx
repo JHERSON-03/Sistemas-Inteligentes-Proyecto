@@ -66,7 +66,7 @@ export default function Metrics() {
           </div>
           <ul className="space-y-3">
             {data.time.map((t) => (
-              <li key={t.kind} className="flex items-center justify-between rounded-xl bg-white/5 px-4 py-3">
+              <li key={t.kind} className="flex items-center justify-between rounded-xl bg-navy/5 px-4 py-3">
                 <span className="flex items-center gap-3 font-semibold"><span className="h-3 w-3 rounded-full" style={{ background: t.color }} /> {t.label}</span>
                 <span className="font-extrabold">{t.hours} h</span>
               </li>
@@ -85,7 +85,7 @@ export default function Metrics() {
           <div><p className="text-sm text-muted">Puntos totales</p><p className="text-2xl font-extrabold">{data.points}</p></div>
         </div>
         <div className="card flex items-center gap-4 p-5">
-          <Ring value={(data.autonomy.level / data.autonomy.max) * 100} color="#34D399" size={56} stroke={6}>
+          <Ring value={(data.autonomy.level / data.autonomy.max) * 100} color="#0F9F6E" size={56} stroke={6}>
             <Gauge size={18} />
           </Ring>
           <div><p className="text-sm text-muted">Nivel de autonomía</p><p className="text-2xl font-extrabold">Nivel {data.autonomy.level} de {data.autonomy.max}</p></div>

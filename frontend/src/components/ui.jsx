@@ -1,10 +1,10 @@
 import { BookOpen, Calculator, FlaskConical, Landmark, Loader2 } from 'lucide-react'
 
 export const COURSES = [
-  { slug: 'historia', name: 'Historia', color: '#F59E0B', Icon: Landmark },
-  { slug: 'ciencia', name: 'Ciencia y Tecnología', color: '#22C55E', Icon: FlaskConical },
-  { slug: 'matematica', name: 'Matemática', color: '#4F7CFF', Icon: Calculator },
-  { slug: 'comunicacion', name: 'Comunicación', color: '#EC4899', Icon: BookOpen },
+  { slug: 'historia', name: 'Historia', color: '#D97706', Icon: Landmark },
+  { slug: 'ciencia', name: 'Ciencia y Tecnología', color: '#16A34A', Icon: FlaskConical },
+  { slug: 'matematica', name: 'Matemática', color: '#2563EB', Icon: Calculator },
+  { slug: 'comunicacion', name: 'Comunicación', color: '#DB2777', Icon: BookOpen },
 ]
 
 export const courseBySlug = (slug) => COURSES.find((c) => c.slug === slug) || COURSES[0]
@@ -18,10 +18,10 @@ export function Logo({ size = 'md' }) {
   )
 }
 
-export function ProgressBar({ value, color = '#C8B83A', height = 'h-2' }) {
+export function ProgressBar({ value, color = '#A8A028', height = 'h-2' }) {
   const pct = Math.max(0, Math.min(100, value))
   return (
-    <div className={`${height} w-full overflow-hidden rounded-full bg-white/10`} role="progressbar" aria-valuenow={pct}
+    <div className={`${height} w-full overflow-hidden rounded-full bg-navy/10`} role="progressbar" aria-valuenow={pct}
       aria-valuemin={0} aria-valuemax={100}>
       <div className="h-full rounded-full transition-all duration-500" style={{ width: `${pct}%`, background: color }} />
     </div>
@@ -43,7 +43,7 @@ export function Ring({ value, color, size = 64, stroke = 7, children }) {
   return (
     <div className="relative grid place-items-center" style={{ width: size, height: size }}>
       <svg width={size} height={size} className="-rotate-90">
-        <circle cx={size / 2} cy={size / 2} r={r} stroke="rgba(255,255,255,.1)" strokeWidth={stroke} fill="none" />
+        <circle cx={size / 2} cy={size / 2} r={r} stroke="rgba(40,64,120,.12)" strokeWidth={stroke} fill="none" />
         <circle cx={size / 2} cy={size / 2} r={r} stroke={color} strokeWidth={stroke} fill="none" strokeLinecap="round"
           strokeDasharray={circ} strokeDashoffset={circ * (1 - value / 100)} className="transition-all duration-700" />
       </svg>

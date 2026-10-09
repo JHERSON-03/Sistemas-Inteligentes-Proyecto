@@ -20,12 +20,12 @@ export default function Layout() {
 
   return (
     <div className="min-h-screen">
-      <header className="sticky top-0 z-40 border-b border-line bg-bg/90 backdrop-blur">
+      <header className="sticky top-0 z-40 border-b-4 border-accent bg-card/95 shadow-soft backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
           <button onClick={() => navigate('/')} className="flex items-center gap-3">
             <Logo />
             <div className="text-left leading-tight">
-              <div className="whitespace-nowrap text-lg font-extrabold">Louis Pasteur</div>
+              <div className="whitespace-nowrap text-lg font-extrabold text-navy">Louis Pasteur</div>
               <span className="text-xs font-bold text-muted">Laredo 2026</span>
             </div>
           </button>
@@ -39,7 +39,7 @@ export default function Layout() {
               <Star size={16} /> {user.points} <span className="hidden sm:inline">pts</span>
             </span>
             <div className="relative">
-              <button onClick={() => setMenu((m) => !m)} className="flex items-center gap-2 rounded-full p-1 pr-3 hover:bg-white/5">
+              <button onClick={() => setMenu((m) => !m)} className="flex items-center gap-2 rounded-full p-1 pr-3 hover:bg-navy/5">
                 <span className="grid h-9 w-9 place-items-center rounded-full bg-tutor/30 text-sm font-extrabold text-tutor-soft">
                   {initials}
                 </span>
@@ -64,7 +64,7 @@ export default function Layout() {
             <NavLink key={to} to={to} end={end}
               className={({ isActive }) =>
                 `flex shrink-0 items-center gap-2 rounded-xl px-4 py-2 text-sm font-bold transition ${
-                  isActive ? 'bg-primary text-primary-ink' : 'text-muted hover:bg-white/5 hover:text-ink'}`}>
+                  isActive ? 'bg-primary text-primary-ink' : 'text-muted hover:bg-navy/5 hover:text-ink'}`}>
               <Icon size={16} /> {label}
             </NavLink>
           ))}

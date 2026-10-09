@@ -45,7 +45,7 @@ function DailyChallenge({ challenge, onSolved }) {
 
   if (challenge.answered && !result) {
     return (
-      <div className="flex items-start gap-3 rounded-xl bg-white/5 p-3 text-sm">
+      <div className="flex items-start gap-3 rounded-xl bg-navy/5 p-3 text-sm">
         <CheckCircle2 className={challenge.was_correct ? 'text-success' : 'text-streak'} size={20} />
         <div><b>Reto resuelto hoy.</b> <span className="text-muted">{challenge.explanation}</span></div>
       </div>
@@ -63,7 +63,7 @@ function DailyChallenge({ challenge, onSolved }) {
             <button key={i} disabled={!!result} onClick={() => setSelected(i)}
               className={`rounded-xl border px-3 py-2 text-left text-sm font-semibold transition ${
                 isAnswer ? 'border-success bg-success/15' : isWrong ? 'border-streak bg-streak/15'
-                  : selected === i ? 'border-primary bg-primary/15' : 'border-line hover:bg-white/5'}`}>
+                  : selected === i ? 'border-primary bg-primary/15' : 'border-line hover:bg-navy/5'}`}>
               {opt}
             </button>
           )
@@ -93,16 +93,16 @@ export default function Dashboard() {
   return (
     <div className="space-y-5">
       {/* 1. Banner de bienvenida */}
-      <section className="relative overflow-hidden rounded-card bg-gradient-to-r from-card via-navy to-[#3A5596] border border-primary/30 p-6 shadow-soft md:p-8">
+      <section className="relative overflow-hidden rounded-card border-b-4 border-accent bg-gradient-to-r from-navy via-navy to-[#3A5596] p-6 text-white shadow-soft md:p-8">
         <img src="/img/banner-1ro.jpg" alt="" className="absolute inset-y-0 right-0 hidden h-full w-1/2 object-cover opacity-40 [mask-image:linear-gradient(to_left,black,transparent)] md:block" />
         <div className="relative max-w-xl">
           <h1 className="text-2xl font-extrabold md:text-3xl">¡Hola, {user.first_name}! Sigue con tu aprendizaje hoy 👋</h1>
-          <p className="mt-2 text-tutor-soft">
+          <p className="mt-2 text-white/80">
             Llevas {stats.streak} {stats.streak === 1 ? 'día' : 'días'} seguidos estudiando. ¡No rompas tu racha!
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
-            <Link to="/tutor" className="btn-primary"><Bot size={18} /> Hablar con el Tutor IA</Link>
-            <button onClick={() => navigate(next ? `/rutas/${next.route_id}` : '/rutas')} className="btn-outline border-white/40">
+            <Link to="/tutor" className="btn-gold"><Bot size={18} /> Hablar con el Tutor IA</Link>
+            <button onClick={() => navigate(next ? `/rutas/${next.route_id}` : '/rutas')} className="btn border border-white/50 text-white hover:bg-white/10">
               <Route size={18} /> Continuar mi ruta
             </button>
           </div>
@@ -111,13 +111,13 @@ export default function Dashboard() {
 
       {/* 2. Tarjetas de estadísticas */}
       <section className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <StatCard Icon={Flame} color="#FB923C" title="Racha" value={`${stats.streak} días seguidos`}
+        <StatCard Icon={Flame} color="#E8590C" title="Racha" value={`${stats.streak} días seguidos`}
           sub={`Tu récord: ${stats.best_streak} días`} progress={(stats.streak / Math.max(stats.best_streak, 1)) * 100} />
-        <StatCard Icon={Star} color="#E6CF4F" title="Puntos" value={`${stats.points} pts`}
+        <StatCard Icon={Star} color="#A8A028" title="Puntos" value={`${stats.points} pts`}
           sub={`+${stats.weekly_points} pts esta semana`} progress={(stats.points % 1000) / 10} />
-        <StatCard Icon={Clock} color="#6F8FD6" title="Estudio de la semana" value={`${stats.week_hours} h`}
+        <StatCard Icon={Clock} color="#3B5BA5" title="Estudio de la semana" value={`${stats.week_hours} h`}
           sub={`Meta: ${stats.goal_hours} h`} progress={(stats.week_hours / stats.goal_hours) * 100} />
-        <StatCard Icon={CheckCircle2} color="#34D399" title="Temas dominados" value={`${stats.topics_done} / ${stats.topics_total}`}
+        <StatCard Icon={CheckCircle2} color="#0F9F6E" title="Temas dominados" value={`${stats.topics_done} / ${stats.topics_total}`}
           sub="Actividades completadas" progress={(stats.topics_done / stats.topics_total) * 100} />
       </section>
 
@@ -130,7 +130,7 @@ export default function Dashboard() {
               <div key={d.date} className="flex flex-col items-center gap-1.5">
                 <div className={`grid h-10 w-10 place-items-center rounded-full border-2 text-lg ${
                   d.state === 'today' ? 'border-streak bg-streak/20 ring-4 ring-streak/20'
-                    : d.studied ? 'border-streak/60 bg-streak/15' : d.state === 'missed' ? 'border-line bg-white/5' : 'border-dashed border-line'}`}>
+                    : d.studied ? 'border-streak/60 bg-streak/15' : d.state === 'missed' ? 'border-line bg-navy/5' : 'border-dashed border-line'}`}>
                   {d.studied ? '🔥' : ''}
                 </div>
                 <span className={`text-xs font-bold ${d.state === 'today' ? 'text-streak' : 'text-muted'}`}>{d.label}</span>
@@ -148,7 +148,7 @@ export default function Dashboard() {
               const { Icon } = courseBySlug(c.slug)
               return (
                 <Link key={c.slug} to={`/rutas?curso=${c.slug}`}
-                  className="rounded-xl border border-line p-3 transition hover:-translate-y-0.5 hover:bg-white/5"
+                  className="rounded-xl border border-line p-3 transition hover:-translate-y-0.5 hover:bg-navy/5"
                   style={{ borderTopColor: c.color, borderTopWidth: 3 }}>
                   <span className="mb-2 grid h-9 w-9 place-items-center rounded-lg" style={{ background: `${c.color}22`, color: c.color }}>
                     <Icon size={18} />

@@ -5,7 +5,7 @@ import { COURSES, CourseTag, ErrorBox, Loading, ProgressBar } from '../component
 import { useApi } from '../hooks/useApi'
 
 const LEVEL_STYLE = {
-  'básico': 'bg-white/10 text-muted',
+  'básico': 'bg-navy/10 text-muted',
   intermedio: 'bg-primary/15 text-primary-soft',
   avanzado: 'bg-success/15 text-success',
 }

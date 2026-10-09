@@ -46,15 +46,15 @@ export default function Login() {
       <section className="relative hidden overflow-hidden lg:block">
         <img src="/img/banner-1ro.jpg" alt="Estudiante aprendiendo con un robot tutor amigable"
           className="absolute inset-0 h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/30 to-transparent" />
-        <div className="absolute bottom-10 left-10 right-10">
+        <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/40 to-transparent" />
+        <div className="absolute bottom-10 left-10 right-10 text-white">
           <p className="text-3xl font-extrabold leading-tight">Aprende a tu ritmo,<br />con un tutor que te guía.</p>
-          <p className="mt-2 text-muted">Colegio Louis Pasteur · Laredo, La Libertad</p>
+          <p className="mt-2 text-accent">Colegio Louis Pasteur · Laredo, La Libertad</p>
         </div>
       </section>
 
       <section className="flex items-center justify-center px-4 py-10">
-        <form onSubmit={submit} className="card animate-pop w-full max-w-md space-y-5 p-8" noValidate>
+        <form onSubmit={submit} className="card animate-pop w-full max-w-md space-y-5 border-t-4 border-t-accent p-8" noValidate>
           <div className="flex flex-col items-center text-center">
             <Logo size="lg" />
             <h1 className="mt-4 text-2xl font-extrabold">Bienvenido a Louis Pasteur</h1>
@@ -86,7 +86,7 @@ export default function Login() {
             </div>
           </label>
 
-          {error && <p className="rounded-xl bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-300">{error}</p>}
+          {error && <p className="rounded-xl bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-700">{error}</p>}
 
           <button className="btn-primary w-full py-3.5 text-lg" disabled={busy}>
             {busy && <Loader2 className="animate-spin" size={18} />} Ingresar

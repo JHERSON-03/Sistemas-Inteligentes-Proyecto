@@ -1,32 +1,35 @@
-/** Paleta institucional del I.E.P. Louis Pasteur (Laredo): azul marino y dorado del escudo */
+/** Paleta institucional del I.E.P. Louis Pasteur (Laredo): fondo blanco con el azul marino y el dorado del escudo */
 export default {
   content: ['./index.html', './src/**/*.{js,jsx}'],
   theme: {
     extend: {
       colors: {
-        bg: '#0B1633',
-        card: '#13234A',
-        'card-2': '#1A2E5E',
-        line: '#2A4176',
-        ink: '#F2F4FA',
-        muted: '#A3B1D1',
-        // Azul marino exacto del escudo
+        bg: '#F4F6FB',
+        card: '#FFFFFF',
+        'card-2': '#EDF1F8',
+        line: '#D6DEEC',
+        ink: '#16244A',
+        muted: '#5A6A8A',
+        // Azul marino exacto del escudo: botones, pestaña activa y enlaces
         navy: '#284078',
-        // Dorado del escudo (#A8A028), un poco más luminoso para leerse bien sobre fondo oscuro
-        primary: '#C8B83A',
-        'primary-hover': '#B3A42E',
-        'primary-ink': '#0B1633',
-        'primary-soft': '#E8DE97',
-        // Azul institucional claro para el Tutor IA
-        tutor: '#6F8FD6',
-        'tutor-soft': '#C9D6F5',
-        success: '#34D399',
-        streak: '#FB923C',
-        gold: '#E6CF4F',
-        historia: '#F59E0B',
-        ciencia: '#22C55E',
-        matematica: '#4F7CFF',
-        comunicacion: '#EC4899',
+        primary: '#284078',
+        'primary-hover': '#1E3262',
+        'primary-ink': '#FFFFFF',
+        'primary-soft': '#1E3262',
+        // Dorado exacto del escudo: bordes, acentos y botón destacado
+        accent: '#A8A028',
+        'accent-hover': '#958E20',
+        // Azul institucional para el Tutor IA
+        tutor: '#3B5BA5',
+        'tutor-soft': '#284078',
+        success: '#0F9F6E',
+        streak: '#E8590C',
+        // Dorado oscuro para los puntos: se lee bien sobre blanco
+        gold: '#8A7E12',
+        historia: '#D97706',
+        ciencia: '#16A34A',
+        matematica: '#2563EB',
+        comunicacion: '#DB2777',
       },
       fontFamily: {
         sans: ['Nunito Sans', 'Nunito', 'Inter', 'system-ui', 'sans-serif'],
@@ -35,7 +38,7 @@ export default {
         card: '16px',
       },
       boxShadow: {
-        soft: '0 8px 24px -12px rgba(0,0,0,0.6)',
+        soft: '0 8px 24px -12px rgba(22,36,74,0.18)',
       },
     },
   },

@@ -58,7 +58,7 @@ export default function RouteDetail() {
       <div className="card p-5">
         <div className="mb-2 flex flex-wrap items-center gap-2">
           <CourseTag course={data.course} />
-          <span className="chip bg-white/10 text-xs capitalize text-muted">Nivel: {data.level}</span>
+          <span className="chip bg-navy/10 text-xs capitalize text-muted">Nivel: {data.level}</span>
         </div>
         <h1 className="text-2xl font-extrabold">{data.title}</h1>
         <p className="text-muted">{data.description}</p>
@@ -74,7 +74,7 @@ export default function RouteDetail() {
             <li key={a.id}>
               <button onClick={() => select(a)}
                 className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-semibold ${
-                  a.id === activity.id ? 'bg-primary/15 text-ink' : 'text-muted hover:bg-white/5'}`}>
+                  a.id === activity.id ? 'bg-primary/15 text-ink' : 'text-muted hover:bg-navy/5'}`}>
                 {a.completed ? <CheckCircle2 size={18} className="shrink-0 text-success" /> : <Circle size={18} className="shrink-0" />}
                 {a.order}. {a.title}
               </button>
@@ -101,7 +101,7 @@ export default function RouteDetail() {
                     <button key={i} disabled={feedback?.correct} onClick={() => { setSelected(i); if (feedback && !feedback.correct) setFeedback(null) }}
                       className={`flex items-center gap-3 rounded-xl border-2 p-4 text-left font-semibold transition ${
                         ok ? 'border-success bg-success/10' : bad ? 'border-streak bg-streak/10'
-                          : selected === i ? 'border-primary bg-primary/10' : 'border-line hover:bg-white/5'}`}>
+                          : selected === i ? 'border-primary bg-primary/10' : 'border-line hover:bg-navy/5'}`}>
                       <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-current text-sm">{String.fromCharCode(65 + i)}</span>
                       {opt}
                     </button>

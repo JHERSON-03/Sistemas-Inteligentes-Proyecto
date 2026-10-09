@@ -45,7 +45,7 @@ export default function Register() {
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4 py-10">
-      <form onSubmit={submit} className="card animate-pop w-full max-w-lg space-y-4 p-8" noValidate>
+      <form onSubmit={submit} className="card animate-pop w-full max-w-lg space-y-4 border-t-4 border-t-accent p-8" noValidate>
         <Link to="/login" className="btn-ghost -ml-3 w-fit"><ArrowLeft size={16} /> Volver</Link>
         <div className="flex items-center gap-4">
           <Logo size="lg" />
@@ -87,7 +87,7 @@ export default function Register() {
           </label>
         </div>
 
-        {error && <p className="rounded-xl bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-300">{error}</p>}
+        {error && <p className="rounded-xl bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-700">{error}</p>}
 
         <button className="btn-primary w-full py-3.5 text-lg" disabled={busy}>
           {busy && <Loader2 className="animate-spin" size={18} />} Crear cuenta

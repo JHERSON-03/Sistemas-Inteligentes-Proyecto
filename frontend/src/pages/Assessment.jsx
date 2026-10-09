@@ -100,7 +100,7 @@ export default function Assessment() {
           <span className="chip bg-primary/15 text-primary-soft">Pregunta {index + 1} de {total}</span>
         </div>
         <p className="mt-1 text-sm text-muted">Esta prueba no es una nota; sirve para ver cómo razonas.</p>
-        <div className="mt-3"><ProgressBar value={((index + (result ? 1 : 0)) / total) * 100} color="#6F8FD6" height="h-2.5" /></div>
+        <div className="mt-3"><ProgressBar value={((index + (result ? 1 : 0)) / total) * 100} color="#3B5BA5" height="h-2.5" /></div>
       </div>
 
       <div className="card overflow-hidden">
@@ -118,7 +118,7 @@ export default function Assessment() {
             <button key={i} disabled={!!result} onClick={() => setSelected(i)}
               className={`card flex w-full items-center gap-4 p-4 text-left transition ${
                 isRight ? '!border-success bg-success/10' : isWrong ? '!border-streak bg-streak/10'
-                  : selected === i ? '!border-primary bg-primary/10' : 'hover:bg-white/5'}`}>
+                  : selected === i ? '!border-primary bg-primary/10' : 'hover:bg-navy/5'}`}>
               <span className={`grid h-6 w-6 shrink-0 place-items-center rounded-full border-2 ${selected === i ? 'border-primary' : 'border-line'}`}>
                 {selected === i && <span className="h-3 w-3 rounded-full bg-primary" />}
               </span>
@@ -134,7 +134,7 @@ export default function Assessment() {
           {CONFIDENCE.map((c) => (
             <button key={c.value} disabled={!!result} onClick={() => setConfidence(c.value)}
               className={`rounded-xl border px-3 py-2.5 text-sm font-bold transition ${
-                confidence === c.value ? 'border-tutor bg-tutor/20 text-tutor-soft' : 'border-line text-muted hover:bg-white/5'}`}>
+                confidence === c.value ? 'border-tutor bg-tutor/20 text-tutor-soft' : 'border-line text-muted hover:bg-navy/5'}`}>
               {c.label}
             </button>
           ))}

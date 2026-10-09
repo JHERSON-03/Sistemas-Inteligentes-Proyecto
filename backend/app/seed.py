@@ -15,10 +15,10 @@ DEMO_PASSWORD = "pasteur2026"
 
 
 COURSES = [
-    ("historia", "Historia", "#F59E0B", "landmark"),
-    ("ciencia", "Ciencia y Tecnología", "#22C55E", "flask"),
-    ("matematica", "Matemática", "#4F7CFF", "calculator"),
-    ("comunicacion", "Comunicación", "#EC4899", "book"),
+    ("historia", "Historia", "#D97706", "landmark"),
+    ("ciencia", "Ciencia y Tecnología", "#16A34A", "flask"),
+    ("matematica", "Matemática", "#2563EB", "calculator"),
+    ("comunicacion", "Comunicación", "#DB2777", "book"),
 ]
 
 # (curso, título, descripción, minutos, bonus, actividades[(título, pregunta, opciones, respuesta, pista, explicación)])

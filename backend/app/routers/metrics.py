@@ -51,10 +51,10 @@ def metrics(user: models.User = Depends(current_user), db: Session = Depends(get
         "status": "Vas muy bien" if avg >= 60 else ("Vas mejorando" if avg >= 30 else "¡Tú puedes!"),
         "courses": sorted(courses, key=lambda c: -c["percent"]),
         "time": [
-            {"kind": "ruta", "label": "Rutas adaptativas", "hours": round(minutes["ruta"] / 60, 1), "color": "#4F7CFF"},
-            {"kind": "tutor", "label": "Tutor IA", "hours": round(minutes["tutor"] / 60, 1), "color": "#8B7BFF"},
+            {"kind": "ruta", "label": "Rutas adaptativas", "hours": round(minutes["ruta"] / 60, 1), "color": "#284078"},
+            {"kind": "tutor", "label": "Tutor IA", "hours": round(minutes["tutor"] / 60, 1), "color": "#A8A028"},
             {"kind": "autoevaluacion", "label": "Autoevaluación", "hours": round(minutes["autoevaluacion"] / 60, 1),
-             "color": "#34D399"},
+             "color": "#0F9F6E"},
         ],
         "streak": user.streak,
         "best_streak": user.best_streak,

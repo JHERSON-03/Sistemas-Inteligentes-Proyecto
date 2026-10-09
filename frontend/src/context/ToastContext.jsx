@@ -3,9 +3,9 @@ import { createContext, useCallback, useContext, useState } from 'react'
 const ToastContext = createContext(null)
 
 const TONES = {
-  success: 'border-success/40 bg-[#123326] text-success',
+  success: 'border-success/40 bg-[#E7F7EF] text-success',
   info: 'border-primary/40 bg-card-2 text-primary-soft',
-  warn: 'border-streak/40 bg-[#3a2410] text-streak',
+  warn: 'border-streak/40 bg-[#FDF0E6] text-streak',
 }
 
 export function ToastProvider({ children }) {
