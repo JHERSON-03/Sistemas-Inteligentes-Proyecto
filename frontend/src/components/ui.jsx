@@ -14,7 +14,7 @@ export function Logo({ size = 'md' }) {
   const box = size === 'lg' ? 'h-28 w-28 sm:h-32 sm:w-32' : 'h-12 w-12'
   return (
     <img src="/img/logo-pasteur.png" alt="Escudo del I.E.P. Louis Pasteur de Laredo"
-      className={`${box} shrink-0 object-contain drop-shadow-lg`} />
+      className={`${box} shrink-0 object-contain drop-shadow-sm`} />
   )
 }
 
@@ -47,7 +47,7 @@ export function Ring({ value, color, size = 64, stroke = 7, children }) {
         <circle cx={size / 2} cy={size / 2} r={r} stroke={color} strokeWidth={stroke} fill="none" strokeLinecap="round"
           strokeDasharray={circ} strokeDashoffset={circ * (1 - value / 100)} className="transition-all duration-700" />
       </svg>
-      <div className="absolute text-sm font-extrabold">{children ?? `${value}%`}</div>
+      <div className="num absolute text-sm font-extrabold">{children ?? `${value}%`}</div>
     </div>
   )
 }
@@ -55,15 +55,15 @@ export function Ring({ value, color, size = 64, stroke = 7, children }) {
 export function Loading({ label = 'Cargando…' }) {
   return (
     <div className="grid min-h-[40vh] place-items-center text-muted">
-      <div className="flex items-center gap-3"><Loader2 className="animate-spin" /> {label}</div>
+      <div className="flex items-center gap-3 text-sm font-semibold"><Loader2 className="animate-spin text-navy" size={20} /> {label}</div>
     </div>
   )
 }
 
 export function ErrorBox({ message, onRetry }) {
   return (
-    <div className="card mx-auto max-w-md p-6 text-center">
-      <p className="mb-4 text-muted">{message}</p>
+    <div className="card mx-auto max-w-md border-l-4 border-l-streak p-6">
+      <p className="mb-4 text-ink/80">{message}</p>
       {onRetry && <button className="btn-primary" onClick={onRetry}>Reintentar</button>}
     </div>
   )

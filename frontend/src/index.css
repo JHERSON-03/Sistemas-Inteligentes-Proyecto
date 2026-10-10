@@ -1,3 +1,6 @@
+/* Títulos con carácter (Bricolage Grotesque) sobre el cuerpo en Nunito Sans */
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -5,23 +8,40 @@
 @layer base {
   html { color-scheme: light; }
   body { @apply bg-bg text-ink font-sans antialiased; }
+  h1, h2, h3 { font-family: 'Bricolage Grotesque', 'Nunito Sans', system-ui, sans-serif; letter-spacing: -0.015em; }
+  h1 { letter-spacing: -0.025em; }
+  ::selection { background: rgb(168 160 40 / 0.3); }
 }
 
 @layer components {
-  .card { @apply bg-card rounded-card shadow-soft; }
-  .btn { @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 font-bold transition active:scale-[.98] disabled:opacity-50 disabled:cursor-not-allowed; }
-  .btn-primary { @apply btn bg-primary text-primary-ink hover:bg-primary-hover; }
-  .btn-gold { @apply btn bg-accent text-navy hover:bg-accent-hover; }
-  .btn-outline { @apply btn border border-line text-ink hover:bg-navy/5; }
-  .btn-ghost { @apply btn px-3 py-2 text-muted hover:text-ink hover:bg-navy/5; }
+  /* Tarjeta plana: borde fino en lugar de sombra */
+  .card { @apply rounded-xl border border-line/80 bg-card; }
+  /* Encabezado de sección: título con un trazo dorado corto delante */
+  .section-title { @apply flex items-center gap-2 text-[1.05rem] font-extrabold; }
+  .section-title::before { content: ''; @apply h-4 w-1 shrink-0 rounded-full bg-accent; }
+  .num { font-variant-numeric: tabular-nums; }
+
+  .btn { @apply inline-flex select-none items-center justify-center gap-2 rounded-lg px-5 py-3 font-bold transition duration-150
+    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-card
+    active:translate-y-px disabled:pointer-events-none disabled:opacity-50; }
+  /* Botones con relieve: borde inferior más oscuro que se "hunde" al presionar */
+  .btn-primary { @apply btn bg-primary text-primary-ink shadow-[inset_0_-2px_0_rgb(0_0_0/0.22)] hover:bg-primary-hover active:shadow-none; }
+  .btn-gold { @apply btn bg-accent text-navy shadow-[inset_0_-2px_0_rgb(0_0_0/0.18)] hover:bg-accent-hover active:shadow-none; }
+  .btn-outline { @apply btn border border-line bg-card text-ink hover:border-navy/40 hover:bg-navy/[0.03]; }
+  .btn-ghost { @apply btn px-3 py-2 text-muted hover:bg-navy/5 hover:text-ink; }
   .chip { @apply inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1 text-sm font-bold; }
-  .input { @apply w-full rounded-xl bg-bg border border-line px-4 py-3 text-ink placeholder:text-muted/70 outline-none focus:border-primary focus:ring-2 focus:ring-primary/30; }
-  .label { @apply text-sm font-semibold text-muted; }
+  .input { @apply w-full rounded-lg border border-line bg-card px-4 py-3 text-ink outline-none transition placeholder:text-muted/60
+    hover:border-navy/30 focus:border-primary focus:ring-4 focus:ring-primary/10; }
+  .label { @apply text-sm font-bold text-ink/80; }
 }
 
-@keyframes pop { 0% { transform: translateY(12px) scale(.96); opacity: 0 } 100% { transform: none; opacity: 1 } }
-.animate-pop { animation: pop .25s ease-out; }
+@keyframes pop { 0% { transform: translateY(8px); opacity: 0 } 100% { transform: none; opacity: 1 } }
+.animate-pop { animation: pop .22s cubic-bezier(.2, .8, .2, 1); }
 @keyframes typing { 0%, 80%, 100% { opacity: .2 } 40% { opacity: 1 } }
 .typing span { animation: typing 1.2s infinite; }
 .typing span:nth-child(2) { animation-delay: .2s; }
 .typing span:nth-child(3) { animation-delay: .4s; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}

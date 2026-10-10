@@ -1,11 +1,29 @@
 from .. import models
 from ..core.config import POINTS_TUTOR_SESSION
 
-SUGGESTIONS = [
-    "¿Cómo resuelvo 2x + 3 = 11?",
-    "¿Quiénes construyeron Chan Chan?",
-    "Ayúdame a mejorar mi cuento",
-]
+# Preguntas sugeridas por curso, alineadas con los temas de las rutas de 1ro de secundaria
+SUGGESTIONS = {
+    "historia": [
+        "¿Quiénes construyeron Chan Chan?",
+        "¿Por qué Caral es tan importante?",
+        "¿Cómo vivían los primeros pobladores del Perú?",
+    ],
+    "ciencia": [
+        "¿Cómo calculo la rapidez de un mototaxi?",
+        "¿Qué partes tiene una célula?",
+        "¿Por qué las plantas necesitan luz solar?",
+    ],
+    "matematica": [
+        "¿Cómo resuelvo 2x + 3 = 11?",
+        "¿Cuánto es (−4) + 9 y por qué?",
+        "¿Cómo ubico números enteros en la recta?",
+    ],
+    "comunicacion": [
+        "Ayúdame a mejorar mi cuento",
+        "¿Cuándo lleva tilde una palabra aguda?",
+        "¿Cómo encuentro la idea principal de un texto?",
+    ],
+}
 
 # En la base de datos el emisor se guarda como "alumno" / "tutor"
 API_ROLE = {"alumno": "user", "tutor": "assistant", "user": "user", "assistant": "assistant"}
@@ -26,7 +44,7 @@ def session_out(session_id: str, course: str, first_name: str, msgs: list[models
         "course": course,
         "greeting": greeting(first_name),
         "messages": [message_out(m) for m in msgs],
-        "suggestions": SUGGESTIONS,
+        "suggestions": SUGGESTIONS.get(course, SUGGESTIONS["matematica"]),
         "points_per_session": POINTS_TUTOR_SESSION,
     }
 

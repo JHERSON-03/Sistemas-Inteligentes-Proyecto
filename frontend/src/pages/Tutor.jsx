@@ -36,8 +36,8 @@ function Bubble({ role, children }) {
   return (
     <div className={`flex items-end gap-2 ${mine ? 'justify-end' : ''}`}>
       {!mine && <img src="/img/robot-tutor.jpg" alt="" className="h-8 w-8 shrink-0 rounded-full object-cover" />}
-      <div className={`max-w-[80%] whitespace-pre-wrap rounded-2xl px-4 py-3 leading-relaxed ${
-        mine ? 'rounded-br-md bg-primary text-primary-ink' : 'rounded-bl-md bg-card-2 text-ink'}`}>
+      <div className={`animate-pop max-w-[80%] whitespace-pre-wrap rounded-2xl px-4 py-3 leading-relaxed ${
+        mine ? 'rounded-br-sm bg-navy text-white' : 'rounded-bl-sm border border-line bg-card text-ink'}`}>
         {children}
       </div>
     </div>
@@ -109,13 +109,16 @@ export default function Tutor() {
 
   return (
     <div className="card flex h-[calc(100vh-11rem)] min-h-[560px] flex-col overflow-hidden">
-      <header className="flex flex-wrap items-center justify-between gap-3 border-b border-line p-4">
+      <header className="flex flex-wrap items-center justify-between gap-3 border-b border-line bg-card p-4">
         <div className="flex items-center gap-3">
-          <img src="/img/robot-tutor.jpg" alt="" className="h-12 w-12 rounded-2xl object-cover ring-2 ring-tutor/50" />
+          <img src="/img/robot-tutor.jpg" alt="" className="h-12 w-12 rounded-xl border border-line object-cover" />
           <div>
-            <h1 className="text-lg font-extrabold">Tutor IA Socrático</h1>
-            <span className="chip bg-success/15 px-2 py-0.5 text-xs text-success">
-              <span className="h-2 w-2 rounded-full bg-success" /> En línea
+            <h1 className="text-lg font-extrabold leading-tight">Tutor IA Socrático</h1>
+            <span className="mt-0.5 inline-flex items-center gap-1.5 text-xs font-bold text-success">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-60" />
+                <span className="relative h-2 w-2 rounded-full bg-success" />
+              </span> En línea
             </span>
           </div>
         </div>
@@ -127,12 +130,12 @@ export default function Tutor() {
         </div>
       </header>
 
-      <div className="flex gap-3 border-b border-primary/20 bg-primary/10 px-4 py-3 text-sm text-primary-soft">
+      <div className="flex gap-3 border-b border-line bg-navy/[0.04] px-4 py-3 text-sm text-primary-soft">
         <Info size={18} className="shrink-0" />
         <p><b>Método socrático:</b> el tutor no te da la respuesta directa; te guía con preguntas y pistas para que la descubras tú.</p>
       </div>
 
-      <div className="flex-1 space-y-4 overflow-y-auto p-4">
+      <div className="flex-1 space-y-4 overflow-y-auto bg-bg/60 p-4 md:px-6">
         {!session ? <Loading label="Conectando con tu tutor…" /> : (
           <>
             <Bubble role="assistant">{session.greeting}</Bubble>
@@ -153,11 +156,11 @@ export default function Tutor() {
         <div ref={endRef} />
       </div>
 
-      <footer className="space-y-3 border-t border-line p-4">
+      <footer className="space-y-3 border-t border-line bg-card p-4">
         {session && messages.length === 0 && (
           <div className="flex flex-wrap gap-2">
             {session.suggestions.map((s) => (
-              <button key={s} onClick={() => send(s)} disabled={busy} className="chip border border-tutor/40 bg-tutor/10 text-tutor-soft hover:bg-tutor/20">{s}</button>
+              <button key={s} onClick={() => send(s)} disabled={busy} className="chip border border-line bg-card font-semibold text-ink/80 transition hover:border-navy/40 hover:text-navy active:scale-[.97] disabled:opacity-50">{s}</button>
             ))}
           </div>
         )}

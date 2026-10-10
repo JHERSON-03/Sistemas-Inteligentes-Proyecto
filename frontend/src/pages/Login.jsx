@@ -46,19 +46,22 @@ export default function Login() {
       <section className="relative hidden overflow-hidden lg:block">
         <img src="/img/banner-1ro.jpg" alt="Estudiante aprendiendo con un robot tutor amigable"
           className="absolute inset-0 h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/40 to-transparent" />
-        <div className="absolute bottom-10 left-10 right-10 text-white">
-          <p className="text-3xl font-extrabold leading-tight">Aprende a tu ritmo,<br />con un tutor que te guía.</p>
-          <p className="mt-2 text-accent">Colegio Louis Pasteur · Laredo, La Libertad</p>
+        <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/30 to-transparent" />
+        <div className="absolute bottom-12 left-12 right-12 text-white">
+          <span className="mb-5 block h-1 w-12 rounded-full bg-accent" />
+          <p className="font-['Bricolage_Grotesque'] text-[2.6rem] font-extrabold leading-[1.05] tracking-tight">Aprende a tu ritmo,<br />con un tutor que te guía.</p>
+          <p className="mt-4 text-sm font-bold uppercase tracking-[0.14em] text-accent">Colegio Louis Pasteur · Laredo, La Libertad</p>
         </div>
       </section>
 
       <section className="flex items-center justify-center px-4 py-10">
-        <form onSubmit={submit} className="card animate-pop w-full max-w-md space-y-5 border-t-4 border-t-accent p-8" noValidate>
-          <div className="flex flex-col items-center text-center">
+        <form onSubmit={submit} className="card animate-pop w-full max-w-md space-y-5 overflow-hidden border-t-4 border-t-navy p-8" noValidate>
+          <div className="flex items-center gap-4">
             <Logo size="lg" />
-            <h1 className="mt-4 text-2xl font-extrabold">Bienvenido a Louis Pasteur</h1>
-            <p className="mt-1 text-muted">Solo para estudiantes de 1ro de secundaria</p>
+            <div>
+              <h1 className="text-[1.65rem] font-extrabold leading-tight">Bienvenido a Louis Pasteur</h1>
+              <p className="mt-1 text-sm text-muted">Solo para estudiantes de 1ro de secundaria</p>
+            </div>
           </div>
 
           <img src="/img/robot-tutor.jpg" alt="" className="mx-auto h-28 w-28 rounded-full object-cover lg:hidden" />
@@ -80,26 +83,26 @@ export default function Login() {
                 placeholder="••••••••" value={form.password}
                 onChange={(e) => setForm({ ...form, password: e.target.value })} />
               <button type="button" onClick={() => setShow((s) => !s)} aria-label={show ? 'Ocultar contraseña' : 'Mostrar contraseña'}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-ink">
+                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1 text-muted transition hover:bg-navy/5 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">
                 {show ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
           </label>
 
-          {error && <p className="rounded-xl bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-700">{error}</p>}
+          {error && <p role="alert" className="animate-pop rounded-lg border-l-4 border-red-600 bg-red-500/[0.07] px-4 py-2.5 text-sm font-semibold text-red-700">{error}</p>}
 
           <button className="btn-primary w-full py-3.5 text-lg" disabled={busy}>
             {busy && <Loader2 className="animate-spin" size={18} />} Ingresar
           </button>
 
           <div className="text-center">
-            <button type="button" onClick={forgot} className="text-sm font-semibold text-primary hover:underline">
+            <button type="button" onClick={forgot} className="rounded text-sm font-semibold text-primary underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">
               ¿Olvidaste tu contraseña?
             </button>
             {forgotMsg && <p className="mt-2 text-sm text-muted">{forgotMsg}</p>}
           </div>
 
-          <div className="flex gap-3 rounded-xl border border-primary/30 bg-primary/10 p-3 text-sm text-primary-soft">
+          <div className="flex gap-3 rounded-lg border border-dashed border-navy/25 bg-navy/[0.03] p-3 text-sm text-primary-soft">
             <Info size={18} className="shrink-0" />
             <p>Si no tienes cuenta, pídela a tu tutor o docente. ¿Ya tienes tu código? <Link to="/registro" className="font-bold underline">Actívala aquí</Link>.</p>
           </div>

@@ -5,9 +5,9 @@ import { COURSES, CourseTag, ErrorBox, Loading, ProgressBar } from '../component
 import { useApi } from '../hooks/useApi'
 
 const LEVEL_STYLE = {
-  'básico': 'bg-navy/10 text-muted',
-  intermedio: 'bg-primary/15 text-primary-soft',
-  avanzado: 'bg-success/15 text-success',
+  'básico': 'border-line text-muted',
+  intermedio: 'border-primary/30 text-primary-soft',
+  avanzado: 'border-success/40 text-success',
 }
 
 function RouteCard({ r }) {
@@ -18,30 +18,33 @@ function RouteCard({ r }) {
     : r.percent >= 50 ? `${r.percent}% completado` : `En progreso ${r.percent}%`
 
   return (
-    <article className="card flex flex-col p-5 transition hover:-translate-y-0.5">
+    <article className={`card group relative flex flex-col overflow-hidden p-5 pl-6 transition hover:border-navy/30 ${
+      r.recommended ? 'ring-1 ring-tutor/30' : ''}`}>
+      {/* Lomo de color del curso, como el canto de un cuaderno */}
+      <span className="absolute inset-y-0 left-0 w-1.5 transition-all group-hover:w-2" style={{ background: r.course.color }} />
       <div className="mb-3 flex items-center justify-between gap-2">
         <CourseTag course={r.course} />
-        <span className={`chip text-xs capitalize ${LEVEL_STYLE[r.level]}`}>Nivel: {r.level}</span>
+        <span className={`chip border bg-card text-xs capitalize ${LEVEL_STYLE[r.level]}`}>Nivel: {r.level}</span>
       </div>
-      <h3 className="text-lg font-extrabold">{r.title}</h3>
-      <p className="mt-1 flex-1 text-sm text-muted">{r.description}</p>
+      <h3 className="text-lg font-extrabold leading-snug">{r.title}</h3>
+      <p className="mt-1.5 flex-1 text-sm leading-relaxed text-muted">{r.description}</p>
 
       {r.recommended && (
-        <div className="mt-3 flex items-center gap-2 rounded-lg bg-tutor/15 px-3 py-2 text-xs font-bold text-tutor-soft">
+        <div className="mt-3 flex items-center gap-2 rounded-md border border-dashed border-tutor/40 bg-tutor/[0.06] px-3 py-2 text-xs font-bold text-tutor-soft">
           <Lock size={14} /> <Sparkles size={14} /> Recomendada por la IA
         </div>
       )}
 
       <div className="mt-4 space-y-2">
-        <div className="flex justify-between text-xs font-bold text-muted">
+        <div className="num flex justify-between text-xs font-bold text-muted">
           <span>{statusText}</span><span>{r.done}/{r.total} actividades</span>
         </div>
-        <ProgressBar value={r.percent} color={r.course.color} />
+        <ProgressBar value={r.percent} color={r.course.color} height="h-1.5" />
       </div>
 
-      <div className="mt-4 flex items-center justify-between text-sm text-muted">
-        <span className="flex items-center gap-1"><Clock size={14} /> {r.minutes} min</span>
-        <span className="flex items-center gap-1 font-bold text-gold"><Star size={14} /> +{r.points} pts</span>
+      <div className="mt-4 flex items-center justify-between border-t border-dashed border-line pt-3 text-sm text-muted">
+        <span className="num flex items-center gap-1"><Clock size={14} /> {r.minutes} min</span>
+        <span className="num flex items-center gap-1 font-bold text-gold"><Star size={14} /> +{r.points} pts</span>
       </div>
       <Link to={`/rutas/${r.id}`} className={`${action.cls} mt-4 w-full`}><action.Icon size={16} /> {action.label}</Link>
     </article>
@@ -61,17 +64,26 @@ export default function RoutesPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-extrabold">Mis rutas de aprendizaje · 1ro de Secundaria</h1>
-        <p className="text-muted">Los módulos se ajustan a tu ritmo</p>
-      </div>
-      <div className="flex flex-wrap gap-2">
-        {filters.map((f) => (
-          <button key={f.slug} onClick={() => setParams(f.slug ? { curso: f.slug } : {})}
-            className={`chip border px-4 py-2 ${filter === f.slug ? 'border-primary bg-primary text-primary-ink' : 'border-line text-muted hover:text-ink'}`}>
-            {f.name}
-          </button>
-        ))}
+      <div className="flex flex-wrap items-end justify-between gap-4 border-b border-line pb-5">
+        <div>
+          <h1 className="text-[1.75rem] font-extrabold leading-tight">Mis rutas de aprendizaje · 1ro de Secundaria</h1>
+          <p className="mt-1 text-muted">Los módulos se ajustan a tu ritmo</p>
+        </div>
+        {/* Filtro como control segmentado */}
+        <div className="flex max-w-full gap-1 overflow-x-auto rounded-lg border border-line bg-card p-1">
+          {filters.map((f) => {
+            const color = COURSES.find((c) => c.slug === f.slug)?.color
+            return (
+              <button key={f.slug} onClick={() => setParams(f.slug ? { curso: f.slug } : {})}
+                className={`flex shrink-0 items-center gap-2 rounded-md px-3 py-1.5 text-sm font-bold transition active:scale-[.97]
+                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
+                  filter === f.slug ? 'bg-navy text-white' : 'text-muted hover:bg-navy/5 hover:text-ink'}`}>
+                {color && <span className="h-2 w-2 rounded-full" style={{ background: color }} />}
+                {f.name}
+              </button>
+            )
+          })}
+        </div>
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {routes.map((r) => <RouteCard key={r.id} r={r} />)}
