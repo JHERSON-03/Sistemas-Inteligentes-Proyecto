@@ -3,11 +3,12 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from .. import models
-from ..config import MINUTES_ASSESSMENT, POINTS_ASSESSMENT
-from ..database import get_db
+from ..core.config import MINUTES_ASSESSMENT, POINTS_ASSESSMENT
+from ..core.database import get_db
+from ..core.security import current_user
 from ..schemas import AssessmentAnswerIn
-from ..security import current_user
 from ..services import gamification
+from ..views import assessment as view
 
 router = APIRouter(prefix="/api/assessments", tags=["autoevaluacion"])
 
@@ -17,19 +18,10 @@ CONFIDENCE_TIPS = {
 }
 
 
-def option_out(opt) -> dict:
-    """Las opciones se guardan como {"texto", "razon"}; también acepta texto plano."""
-    if isinstance(opt, str):
-        return {"text": opt, "reason": ""}
-    return {"text": opt.get("texto", opt.get("text", "")), "reason": opt.get("razon", opt.get("reason", ""))}
-
-
 @router.get("")
 def list_assessments(user: models.User = Depends(current_user), db: Session = Depends(get_db)):
     items = db.scalars(select(models.Assessment).order_by(models.Assessment.id)).all()
-    return [{"id": a.id, "title": a.title, "course": {"slug": a.course.slug, "name": a.course.name,
-                                                       "color": a.course.color}, "questions": len(a.questions)}
-            for a in items]
+    return view.assessment_list_out(items)
 
 
 @router.get("/{assessment_id}")
@@ -37,13 +29,7 @@ def get_assessment(assessment_id: int, user: models.User = Depends(current_user)
     a = db.get(models.Assessment, assessment_id)
     if a is None:
         raise HTTPException(404, "Evaluación no encontrada")
-    return {
-        "id": a.id, "title": a.title,
-        "course": {"slug": a.course.slug, "name": a.course.name, "color": a.course.color},
-        "questions": [{"id": q.id, "order": q.order, "situation": q.situation,
-                       "options": [option_out(o) for o in q.options]}
-                      for q in a.questions],
-    }
+    return view.assessment_out(a)
 
 
 @router.post("/questions/{question_id}/check")
@@ -58,11 +44,4 @@ def check_answer(question_id: int, data: AssessmentAnswerIn, user: models.User =
                                    confidence=data.confidence, correct=correct))
     gamification.log_study(db, user, "autoevaluacion", MINUTES_ASSESSMENT)
     db.commit()
-    return {
-        "correct": correct,
-        "answer": q.answer,
-        "feedback": q.feedback_ok if correct else q.feedback_ko,
-        "confidence_tip": CONFIDENCE_TIPS.get((data.confidence, correct)),
-        "points_earned": earned,
-        "total_points": user.points,
-    }
+    return view.check_out(q, correct, CONFIDENCE_TIPS.get((data.confidence, correct)), earned, user)

@@ -3,27 +3,14 @@ from sqlalchemy import or_, select
 from sqlalchemy.orm import Session
 
 from .. import models
-from ..config import GRADE
-from ..database import get_db
+from ..core.config import GRADE
+from ..core.database import get_db
+from ..core.security import create_token, current_user, hash_password, verify_password
 from ..schemas import LoginIn, RegisterIn
-from ..security import create_token, current_user, hash_password, verify_password
 from ..services.gamification import register_login
+from ..views.auth import session_out, user_out
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
-
-
-def user_out(user: models.User) -> dict:
-    return {
-        "id": user.id,
-        "username": user.username,
-        "full_name": user.full_name,
-        "first_name": user.full_name.split()[0],
-        "grade": user.grade,
-        "section": user.section,
-        "points": user.points,
-        "streak": user.streak,
-        "best_streak": user.best_streak,
-    }
 
 
 @router.post("/login")
@@ -33,7 +20,7 @@ def login(data: LoginIn, db: Session = Depends(get_db)):
     if user is None or not verify_password(data.password, user.password_hash):
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Usuario/DNI o contraseña incorrectos")
     streak = register_login(db, user)
-    return {"token": create_token(user.id), "user": user_out(user), "streak_message": streak["message"]}
+    return session_out(create_token(user.id), user, streak["message"])
 
 
 @router.post("/register", status_code=201)
@@ -49,7 +36,7 @@ def register(data: RegisterIn, db: Session = Depends(get_db)):
     db.add(user)
     db.commit()
     register_login(db, user)
-    return {"token": create_token(user.id), "user": user_out(user), "streak_message": None}
+    return session_out(create_token(user.id), user, None)
 
 
 @router.post("/forgot")

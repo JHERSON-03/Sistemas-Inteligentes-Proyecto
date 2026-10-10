@@ -7,7 +7,7 @@ import logging
 import re
 import unicodedata
 
-from ..config import LLM_API_KEY, LLM_BASE_URL, LLM_MODEL, LLM_PROVIDER
+from ..core.config import LLM_API_KEY, LLM_BASE_URL, LLM_MODEL, LLM_PROVIDER
 
 log = logging.getLogger(__name__)
 

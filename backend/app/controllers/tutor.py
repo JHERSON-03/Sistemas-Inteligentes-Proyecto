@@ -5,34 +5,19 @@ from sqlalchemy import select, update
 from sqlalchemy.orm import Session
 
 from .. import models
-from ..config import MINUTES_TUTOR_MESSAGE, POINTS_TUTOR_SESSION
-from ..database import get_db
+from ..core.config import MINUTES_TUTOR_MESSAGE, POINTS_TUTOR_SESSION
+from ..core.database import get_db
+from ..core.security import current_user
 from ..schemas import TutorMessageIn, TutorResetIn
-from ..security import current_user
 from ..services import gamification
 from ..services.tutor_ai import tutor_reply
+from ..views import tutor as view
+from ..views.common import first_name
 
 router = APIRouter(prefix="/api/tutor", tags=["tutor"])
 
-SUGGESTIONS = [
-    "¿Cómo resuelvo 2x + 3 = 11?",
-    "¿Quiénes construyeron Chan Chan?",
-    "Ayúdame a mejorar mi cuento",
-]
-
-
-def greeting(first_name: str) -> str:
-    return (f"¡Hola, {first_name}! Soy tu tutor de aprendizaje autónomo. Estoy aquí para acompañarte sin hacer "
-            "el trabajo por ti. ¿Sobre qué tema quieres reflexionar hoy?")
-
-
 # En la base de datos el emisor se guarda como "alumno" / "tutor"
 DB_ROLE = {"user": "alumno", "assistant": "tutor"}
-API_ROLE = {"alumno": "user", "tutor": "assistant", "user": "user", "assistant": "assistant"}
-
-
-def as_api(m: models.TutorMessage) -> dict:
-    return {"role": API_ROLE.get(m.role, "user"), "content": m.content}
 
 
 def session_messages(db: Session, user_id: int, session_id: str) -> list[models.TutorMessage]:
@@ -51,14 +36,7 @@ def current_session(course: str = "matematica", user: models.User = Depends(curr
     ).order_by(models.TutorMessage.id.desc()))
     session_id = last.session_id if last else uuid.uuid4().hex
     msgs = session_messages(db, user.id, session_id) if last else []
-    return {
-        "session_id": session_id,
-        "course": course,
-        "greeting": greeting(user.full_name.split()[0]),
-        "messages": [as_api(m) for m in msgs],
-        "suggestions": SUGGESTIONS,
-        "points_per_session": POINTS_TUTOR_SESSION,
-    }
+    return view.session_out(session_id, course, first_name(user), msgs)
 
 
 @router.post("/reset")
@@ -69,18 +47,17 @@ def reset(data: TutorResetIn, user: models.User = Depends(current_user), db: Ses
         models.TutorMessage.archived.is_(False),
     ).values(archived=True))
     db.commit()
-    return {"session_id": uuid.uuid4().hex, "course": data.course, "greeting": greeting(user.full_name.split()[0]),
-            "messages": []}
+    return view.reset_out(uuid.uuid4().hex, data.course, first_name(user))
 
 
 @router.post("/message")
 def send_message(data: TutorMessageIn, user: models.User = Depends(current_user), db: Session = Depends(get_db)):
     session_id = data.session_id or uuid.uuid4().hex
     previous = session_messages(db, user.id, session_id)
-    history = [as_api(m) for m in previous]
+    history = [view.message_out(m) for m in previous]
     history.append({"role": "user", "content": data.message.strip()})
 
-    reply, engine = tutor_reply(history, user.full_name.split()[0], data.course)
+    reply, engine = tutor_reply(history, first_name(user), data.course)
 
     db.add(models.TutorMessage(user_id=user.id, session_id=session_id, course=data.course, role=DB_ROLE["user"],
                                content=data.message.strip()))
@@ -89,5 +66,4 @@ def send_message(data: TutorMessageIn, user: models.User = Depends(current_user)
     earned = gamification.add_points(user, POINTS_TUTOR_SESSION) if not previous else 0
     gamification.log_study(db, user, "tutor", MINUTES_TUTOR_MESSAGE)
     db.commit()
-    return {"session_id": session_id, "reply": reply, "engine": engine, "points_earned": earned,
-            "total_points": user.points}
+    return view.reply_out(session_id, reply, engine, earned, user)

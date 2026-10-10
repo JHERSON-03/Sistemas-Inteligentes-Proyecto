@@ -20,8 +20,8 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from . import models
-from .config import GRADE
-from .database import Base, SessionLocal, engine
+from .core.config import GRADE
+from .core.database import Base, SessionLocal, engine
 from .seed import ASSESSMENT, CHALLENGES, COURSES, ROUTES
 
 

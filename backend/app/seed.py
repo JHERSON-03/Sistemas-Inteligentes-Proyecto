@@ -8,8 +8,8 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from . import models
-from .config import GRADE
-from .security import hash_password
+from .core.config import GRADE
+from .core.security import hash_password
 
 DEMO_PASSWORD = "pasteur2026"
 

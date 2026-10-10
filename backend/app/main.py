@@ -3,9 +3,9 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .config import FRONTEND_ORIGIN, INIT_DB
-from .database import Base, SessionLocal, engine
-from .routers import assessment, auth, dashboard, metrics, routes, tutor
+from .core.config import FRONTEND_ORIGIN, INIT_DB
+from .core.database import Base, SessionLocal, engine
+from .controllers import assessment, auth, dashboard, metrics, routes, tutor
 from .seed import seed
 
 

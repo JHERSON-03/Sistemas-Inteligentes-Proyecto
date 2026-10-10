@@ -5,11 +5,12 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from .. import models
-from ..config import MINUTES_ACTIVITY, POINTS_ACTIVITY
-from ..database import get_db
+from ..core.config import MINUTES_ACTIVITY, POINTS_ACTIVITY
+from ..core.database import get_db
+from ..core.security import current_user
 from ..schemas import OptionIn
-from ..security import current_user
 from ..services import adaptive, gamification
+from ..views import routes as view
 
 router = APIRouter(prefix="/api", tags=["rutas"])
 
@@ -28,16 +29,7 @@ def route_detail(route_id: int, user: models.User = Depends(current_user), db: S
     if route is None:
         raise HTTPException(404, "Ruta no encontrada")
     progress = adaptive.progress_map(db, user)
-    summary = adaptive.route_summary(route, progress)
-    summary["activities"] = [
-        {
-            "id": a.id, "order": a.order, "title": a.title, "question": a.question, "options": a.options,
-            "completed": a.id in progress and progress[a.id].completed,
-            "attempts": progress[a.id].attempts if a.id in progress else 0,
-        }
-        for a in route.activities
-    ]
-    return summary
+    return view.route_detail_out(route, adaptive.route_summary(route, progress), progress)
 
 
 @router.post("/activities/{activity_id}/answer")
@@ -52,8 +44,7 @@ def answer_activity(activity_id: int, data: OptionIn, user: models.User = Depend
         prog = models.ActivityProgress(user_id=user.id, activity_id=activity_id, attempts=0)
         db.add(prog)
     if prog.completed:
-        return {"correct": True, "already_completed": True, "explanation": activity.explanation, "points_earned": 0,
-                "total_points": user.points}
+        return view.already_completed_out(activity, user)
 
     prog.attempts += 1
     correct = data.option == activity.answer
@@ -74,12 +65,4 @@ def answer_activity(activity_id: int, data: OptionIn, user: models.User = Depend
     db.commit()
 
     summary = adaptive.route_summary(activity.route, adaptive.progress_map(db, user))
-    return {
-        "correct": correct,
-        "hint": None if correct else activity.hint,
-        "explanation": activity.explanation if correct else None,
-        "points_earned": earned,
-        "route_completed": route_completed,
-        "total_points": user.points,
-        "route": summary,
-    }
+    return view.answer_out(activity, correct, earned, route_completed, user, summary)

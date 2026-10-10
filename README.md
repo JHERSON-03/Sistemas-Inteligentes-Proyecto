@@ -13,24 +13,33 @@ Las pantallas provienen del proyecto de Google Stitch **"Dark Theme Interactive 
 | Backend | Python + FastAPI + SQLAlchemy + PostgreSQL (Supabase) + JWT | Python facilita la parte de sistemas inteligentes (tutor IA, adaptatividad, métricas) |
 | IA | Groq (gratis) o xAI Grok vía API compatible con OpenAI + motor socrático local | Sin API key el tutor funciona igual con reglas |
 
-## Estructura
+## Estructura (MVC)
+
+El backend sigue el patrón **Modelo–Vista–Controlador**:
+
+- **Modelo** (`models/` + `services/`): las entidades de la base de datos y las reglas del negocio.
+- **Vista** (`views/` en el backend, que arma las respuestas JSON, y el frontend React, que las muestra).
+- **Controlador** (`controllers/`): recibe cada petición HTTP, usa los modelos y servicios y responde con una vista.
 
 ```
 backend/
   app/
-    main.py            # App FastAPI, CORS, creación de tablas y datos iniciales
-    config.py          # Variables de entorno y reglas de puntos
-    database.py        # Conexión a Supabase (PostgreSQL) o SQLite local
-    models.py          # Mapeo a las tablas en español: usuarios, rutas, actividades, evaluaciones, retos...
-    security.py        # Contraseñas (bcrypt, compatible con pgcrypto) y JWT
-    seed.py            # Contenido académico y datos de ejemplo para una base vacía
-    cargar_contenido.py # Agrega a la base el contenido que falte, sin tocar usuarios ni progreso
-    routers/           # auth, dashboard, routes, assessment, tutor, metrics
-    services/
+    main.py            # App FastAPI, CORS, registro de controladores, creación de tablas y datos iniciales
+    core/
+      config.py        # Variables de entorno y reglas de puntos
+      database.py      # Conexión a Supabase (PostgreSQL) o SQLite local
+      security.py      # Contraseñas (bcrypt, compatible con pgcrypto) y JWT
+    models/            # MODELO: mapeo a las tablas en español (usuarios, rutas, actividades, evaluaciones, retos...)
+    services/          # MODELO (lógica de negocio)
       gamification.py  # Racha, puntos, tiempo semanal, logros
       adaptive.py      # Nivel por desempeño, recomendación de rutas, nivel de autonomía
       tutor_ai.py      # Tutor socrático (Groq/Grok o motor local)
-frontend/
+    views/             # VISTA: arma las respuestas JSON de cada sección
+    controllers/       # CONTROLADOR: endpoints de auth, dashboard, routes, assessment, tutor, metrics
+    schemas.py         # Validación de los datos que llegan en cada petición
+    seed.py            # Contenido académico y datos de ejemplo para una base vacía
+    cargar_contenido.py # Agrega a la base el contenido que falte, sin tocar usuarios ni progreso
+frontend/             # VISTA: interfaz en React
   src/
     api/client.js      # Cliente HTTP con token
     context/           # Sesión (AuthContext) y avisos emergentes (ToastContext)
