@@ -3,6 +3,7 @@ import Layout from './components/Layout'
 import { Loading } from './components/ui'
 import { useAuth } from './context/AuthContext'
 import Assessment from './pages/Assessment'
+import AtrapaRespuesta from './pages/AtrapaRespuesta'
 import Dashboard from './pages/Dashboard'
 import Login from './pages/Login'
 import Metrics from './pages/Metrics'
@@ -35,6 +36,7 @@ export default function App() {
         <Route path="rutas/:id" element={<RouteDetail />} />
         <Route path="autoevaluacion" element={<Assessment />} />
         <Route path="metricas" element={<Metrics />} />
+        <Route path="juegos" element={<AtrapaRespuesta />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
-import { BarChart3, Bot, ClipboardCheck, Flame, Home, LogOut, Route, Star } from 'lucide-react'
+import { BarChart3, Bot, ClipboardCheck, Flame, Gamepad2, Home, LogOut, Route, Star } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { Logo } from './ui'
 
@@ -10,6 +10,7 @@ const TABS = [
   { to: '/rutas', label: 'Rutas Adaptativas', Icon: Route },
   { to: '/autoevaluacion', label: 'Autoevaluación', Icon: ClipboardCheck },
   { to: '/metricas', label: 'Mis Métricas', Icon: BarChart3 },
+  { to: '/juegos', label: 'Juegos', Icon: Gamepad2 },
 ]
 
 export default function Layout() {

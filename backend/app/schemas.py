@@ -31,3 +31,13 @@ class TutorMessageIn(BaseModel):
 
 class TutorResetIn(BaseModel):
     course: str = Field(..., pattern=r"^(historia|ciencia|matematica|comunicacion)$")
+
+
+class CatchCheckIn(BaseModel):
+    ronda_id: str = Field(..., max_length=2000)
+    indice: int = Field(..., ge=0, lt=20)
+
+
+class CatchResultIn(BaseModel):
+    ronda_id: str = Field(..., max_length=2000)
+    clicados: list[int] = Field(default_factory=list, max_length=20)

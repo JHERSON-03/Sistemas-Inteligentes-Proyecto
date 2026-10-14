@@ -59,4 +59,11 @@ export const api = {
     request('/tutor/message', { method: 'POST', body: { course, message, session_id } }),
 
   metrics: () => request('/metrics'),
+
+  atrapaRonda: () => request('/juegos/atrapa/ronda'),
+  atrapaVerificar: (ronda_id, indice) =>
+    request('/juegos/atrapa/verificar', { method: 'POST', body: { ronda_id, indice } }),
+  atrapaResultado: (ronda_id, clicados) =>
+    request('/juegos/atrapa/resultado', { method: 'POST', body: { ronda_id, clicados } }),
+  atrapaRanking: () => request('/juegos/atrapa/ranking'),
 }

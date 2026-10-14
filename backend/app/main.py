@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .core.config import FRONTEND_ORIGIN, INIT_DB
 from .core.database import Base, SessionLocal, engine
-from .controllers import assessment, auth, dashboard, metrics, routes, tutor
+from .controllers import assessment, auth, dashboard, games, metrics, routes, tutor
 from .seed import seed
 
 
@@ -35,5 +35,6 @@ def health():
     return {"status": "ok"}
 
 
-for r in (auth.router, dashboard.router, routes.router, assessment.router, tutor.router, metrics.router):
+for r in (auth.router, dashboard.router, routes.router, assessment.router, tutor.router, metrics.router,
+          games.router):
     app.include_router(r)
