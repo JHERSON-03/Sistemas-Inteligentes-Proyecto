@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { BarChart3, Bot, ClipboardCheck, Flame, Gamepad2, Home, LogOut, Route, Star } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
@@ -17,7 +17,21 @@ export default function Layout() {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
   const [menu, setMenu] = useState(false)
+  const menuRef = useRef(null)
   const initials = user.full_name.split(' ').map((p) => p[0]).slice(0, 2).join('')
+
+  // El menú se cierra al tocar fuera de él o con Escape
+  useEffect(() => {
+    if (!menu) return
+    const onPointer = (e) => { if (!menuRef.current?.contains(e.target)) setMenu(false) }
+    const onKey = (e) => { if (e.key === 'Escape') setMenu(false) }
+    document.addEventListener('pointerdown', onPointer)
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('pointerdown', onPointer)
+      document.removeEventListener('keydown', onKey)
+    }
+  }, [menu])
 
   return (
     <div className="min-h-screen">
@@ -40,8 +54,8 @@ export default function Layout() {
             <span className="chip num border border-gold/25 bg-gold/[0.08] text-gold" title="Puntos acumulados">
               <Star size={16} /> {user.points} <span className="hidden sm:inline">pts</span>
             </span>
-            <div className="relative">
-              <button onClick={() => setMenu((m) => !m)} aria-expanded={menu}
+            <div className="relative" ref={menuRef}>
+              <button onClick={() => setMenu((m) => !m)} aria-expanded={menu} aria-label="Menú de la cuenta"
                 className={`flex items-center gap-2 rounded-full p-1 pr-1 transition hover:bg-navy/5 md:pr-3 ${menu ? 'bg-navy/5' : ''}`}>
                 <span className="grid h-9 w-9 place-items-center rounded-full bg-navy text-sm font-extrabold text-white ring-2 ring-accent ring-offset-2 ring-offset-card">
                   {initials}
@@ -50,9 +64,13 @@ export default function Layout() {
                   {user.full_name} · {user.grade} {user.section}
                 </span>
               </button>
+              {/* z-50: sin esto las pestañas de abajo se dibujan encima del menú */}
               {menu && (
-                <div className="card animate-pop absolute right-0 mt-2 w-56 p-1.5 shadow-lg shadow-ink/10">
-                  <div className="border-b border-line px-3 py-2 text-sm text-muted md:hidden">{user.full_name} · {user.grade} {user.section}</div>
+                <div className="card animate-pop absolute right-0 z-50 mt-2 w-60 max-w-[calc(100vw-2rem)] p-1.5 shadow-lg shadow-ink/10">
+                  <div className="mb-1 border-b border-line px-3 pb-2.5 pt-2 md:hidden">
+                    <div className="truncate text-sm font-extrabold text-ink">{user.full_name}</div>
+                    <div className="text-xs font-semibold text-muted">{user.grade} {user.section}</div>
+                  </div>
                   <button onClick={logout} className="btn-ghost w-full justify-start hover:bg-streak/10 hover:text-streak">
                     <LogOut size={16} /> Cerrar sesión
                   </button>
