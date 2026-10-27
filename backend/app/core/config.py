@@ -38,6 +38,13 @@ POINTS_TUTOR_SESSION = 5
 POINTS_DAILY_CHALLENGE = 10
 WEEKLY_GOAL_HOURS = 10
 
+# Límites de peticiones: (máximo, ventana en segundos)
+LIMIT_LOGIN_IP = (60, 60)  # holgado: en el laboratorio todo el salón sale por la misma IP
+LIMIT_LOGIN_ACCOUNT = (10, 15 * 60)  # solo cuentan las contraseñas incorrectas
+LIMIT_REGISTER_IP = (40, 60 * 60)  # alcanza para registrar un salón completo
+LIMIT_TUTOR_MINUTE = (10, 60)
+LIMIT_TUTOR_DAY = (150, 24 * 60 * 60)
+
 # Minutos de estudio que se registran por cada acción
 MINUTES_ACTIVITY = 6
 MINUTES_ASSESSMENT = 3

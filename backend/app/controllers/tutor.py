@@ -5,7 +5,8 @@ from sqlalchemy import select, update
 from sqlalchemy.orm import Session
 
 from .. import models
-from ..core.config import MINUTES_TUTOR_MESSAGE, POINTS_TUTOR_SESSION
+from ..core import rate_limit
+from ..core.config import LIMIT_TUTOR_DAY, LIMIT_TUTOR_MINUTE, MINUTES_TUTOR_MESSAGE, POINTS_TUTOR_SESSION
 from ..core.database import get_db
 from ..core.security import current_user
 from ..schemas import TutorMessageIn, TutorResetIn
@@ -18,6 +19,9 @@ router = APIRouter(prefix="/api/tutor", tags=["tutor"])
 
 # En la base de datos el emisor se guarda como "alumno" / "tutor"
 DB_ROLE = {"user": "alumno", "assistant": "tutor"}
+
+TUTOR_MINUTE_MESSAGE = "Estás enviando mensajes muy rápido. Espera {espera} y vuelve a escribir."
+TUTOR_DAY_MESSAGE = "Llegaste al límite de mensajes con el tutor por hoy. Podrás volver a escribir en {espera}."
 
 
 def session_messages(db: Session, user_id: int, session_id: str) -> list[models.TutorMessage]:
@@ -50,7 +54,11 @@ def reset(data: TutorResetIn, user: models.User = Depends(current_user), db: Ses
     return view.reset_out(uuid.uuid4().hex, data.course, first_name(user))
 
 
-@router.post("/message")
+# El límite por minuto va primero: si rechaza el mensaje, no se descuenta del límite diario
+@router.post("/message", dependencies=[
+    Depends(rate_limit.limit_by_user("tutor_minuto", LIMIT_TUTOR_MINUTE, TUTOR_MINUTE_MESSAGE)),
+    Depends(rate_limit.limit_by_user("tutor_dia", LIMIT_TUTOR_DAY, TUTOR_DAY_MESSAGE)),
+])
 def send_message(data: TutorMessageIn, user: models.User = Depends(current_user), db: Session = Depends(get_db)):
     session_id = data.session_id or uuid.uuid4().hex
     previous = session_messages(db, user.id, session_id)

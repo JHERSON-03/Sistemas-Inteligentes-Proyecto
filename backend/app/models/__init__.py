@@ -7,6 +7,7 @@ from .assessment import Assessment, AssessmentAnswer, AssessmentQuestion
 from .challenge import ChallengeAnswer, DailyChallenge
 from .course import Course
 from .game import GameMatch
+from .rate_limit import RateLimit
 from .route import Activity, ActivityProgress, LearningRoute
 from .study import StudyLog
 from .tutor import TutorMessage
@@ -14,5 +15,5 @@ from .user import LoginDay, User
 
 __all__ = [
     "Activity", "ActivityProgress", "Assessment", "AssessmentAnswer", "AssessmentQuestion", "ChallengeAnswer",
-    "Course", "DailyChallenge", "GameMatch", "LearningRoute", "LoginDay", "StudyLog", "TutorMessage", "User",
+    "Course", "DailyChallenge", "GameMatch", "LearningRoute", "LoginDay", "RateLimit", "StudyLog", "TutorMessage", "User",
 ]
