@@ -10,3 +10,6 @@ frontend/dist/
 
 # Respaldos de datos (pueden contener información de usuarios)
 backend/respaldos/
+
+# Configuración local de MCP (contiene el ID del proyecto de Supabase)
+.mcp.json
